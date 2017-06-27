@@ -1,0 +1,49 @@
+load("/Users/rossd/OneDrive/My R packages/VTrack/Newest release/Package Builds/VTrack for all OS/VTrack/data/crocs.rda")
+ls()
+head(crocs)
+which(crocs$Units.1=="°C")
+crocs <- crocs[-which(crocs$Units.1=="°C"),]
+summary(crocs)
+load("/Users/rossd/OneDrive/My R packages/VTrack/Newest release/Package Builds/VTrack for all OS/VTrack/data/crocs.rda")#
+#
+which(crocs$Units.1=="°C")
+summary(crocs)
+crocs2<- crocs[-which(crocs$Units.1=="Jack-o-sauras T"),]
+summary(crocs2)
+crocs2<- crocs[-which(crocs$Transmitter.Name=="Jack-o-sauras T"),]
+summary(crocs2)
+head(crocs2)
+str(crocs2)
+summary(crocs2)
+crocs2$Units.1
+crocs2$Units.1[which(crocs2$Units.1=="°C")] <- NA#
+crocs2$Sensor.1[which(crocs2$Units.1=="°C")] <- NA
+summary(crocs2)
+crocs2
+crocs2[2000,]
+crocs2[1:2000,]
+crocs2[1:2000,]
+crocs2[1:2000,-ncol(crocs2)]
+crocs2<- crocs[-which(crocs$Transmitter.Name=="Jack-o-sauras T"),]#
+crocs2$Sensor.1[which(crocs2$Units.1=="°C")] <- "NA"#
+crocs2$Units.1[which(crocs2$Units.1=="°C")] <- "NA"#
+crocs2[1:2000,-ncol(crocs2)]
+?load
+row.names(crocs2) <- NULL
+crocs2[1:2000,]
+save(crocs2, file="/Users/rossd/OneDrive/My R packages/VTrack/Newest release/Package Builds/VTrack for all OS/VTrack/data/crocs.rda")
+crocs <- crocs2#
+save(crocs, file="/Users/rossd/OneDrive/My R packages/VTrack/Newest release/Package Builds/VTrack for all OS/VTrack/data/crocs.rda")
+crocs$Transmitter.Name <- as.character(crocs$Transmitter.Name)
+save(crocs, file="/Users/rossd/OneDrive/My R packages/VTrack/Newest release/Package Builds/VTrack for all OS/VTrack/data/crocs.rda")
+crocs$Transmitter.Name[which(crocs$Transmitter.Name=="Jack-o-sauras T")]
+crocs$Transmitter.Name[which(crocs$Transmitter.Name=="Jack-o-sauras D")]
+crocs$Transmitter.Name[which(crocs$Transmitter.Name=="Gecko T")] <- "Gecko"
+crocs$Transmitter.Name[which(crocs$Transmitter.Name=="Jack-o-sauras D")] <- "Jack-o-saurus D"
+save(crocs, file="/Users/rossd/OneDrive/My R packages/VTrack/Newest release/Package Builds/VTrack for all OS/VTrack/data/crocs.rda")
+head(crocs)
+str(crocs)
+crocs$Sensor.1 <- as.numeric(crocs$Sensor.1)#
+#
+save(crocs, file="/Users/rossd/OneDrive/My R packages/VTrack/Newest release/Package Builds/VTrack for all OS/VTrack/data/crocs.rda")
+crocs$Sensor.1

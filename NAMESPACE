@@ -1,0 +1,36 @@
+# Import all packages listed as Imports or Depends
+import(
+  foreach)
+importFrom(plotKML,kml)
+importFrom(sp,SpatialPoints)
+importFrom(sp,proj4string)
+importFrom(spacetime,STIDF)
+importFrom(stats,aggregate)
+importFrom(stats,sd)
+importFrom(utils,read.csv)
+importFrom(stats,na.omit)
+importFrom(parallel,makeCluster)
+importFrom(doParallel,registerDoParallel)
+importFrom(doParallel,stopImplicitCluster)
+importFrom(parallel,stopCluster)
+
+# Export all external functions
+export(
+  ComputeAzimuth,
+  ComputeDistance,
+  ExtractData,
+  ExtractRecSummary,
+  ExtractTagSummary,
+  ExtractUniqueValues,
+  GenerateAnimationKMLFile,
+  GenerateAnimationKMLFile_Multitag,
+  GenerateAnimationKMLFile_Track,
+  GenerateCircuitousDistance,
+  GenerateDirectDistance,
+  NonResidenceExtractId,
+  ReadInputData,
+  ReturnVR2Distance,
+  RunResidenceExtraction,
+  RunSensorEventExtraction,
+  RunTimeProfile
+)

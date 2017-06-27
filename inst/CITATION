@@ -1,0 +1,17 @@
+citHeader("To cite the 'VTrack' package in publications use:")
+
+citEntry(
+entry="Article",
+title = "V-Track: software for analysing and visualising animal movement from acoustic telemetry detections",
+journal = "Marine and Freshwater Research",
+volume = "63",
+pages = {815--820},
+year = "2012",
+author = personList(as.person("Hamish A. Campbell"), 
+                    as.person("Matt E. Watts"), 
+                    as.person("Ross G. Dwyer"),
+                    as.person("Craig E. Franklin")),
+
+textVersion = "Campbell, H.A., Watts, M.E., Dwyer, R.G., Franklin, C.E. (2012) V-Track: software for analysing  
+and visualising animal movement from acoustic telemetry detections, Marine and Freshwater Research 63:815-820"
+)
