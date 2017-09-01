@@ -3,8 +3,9 @@ function(infile,iHoursToAdd=0,fAATAMS=FALSE,fVemcoDualSensor=FALSE,dateformat=NU
 {
 
   header.row <- c("DATETIME","TRANSMITTERID","SENSOR1","UNITS1","RECEIVERID","STATIONNAME")
+  ###Edits
   
-  #Specify time/date format
+  #Specify time/date format 
   if(is.null(dateformat)==TRUE) 
     newDate <- as.POSIXct(strptime(infile[,1],format="%Y-%m-%d %H:%M:%S"))
   if(is.null(dateformat)==FALSE)
