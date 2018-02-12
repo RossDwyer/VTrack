@@ -1,7 +1,6 @@
 ConvertPointsToCircuitousDistance <- 
 function(sInputFile)
 {
-  
   iCount <- 0
   iLog <- 0
   rDistance <- 0
@@ -19,7 +18,7 @@ function(sInputFile)
     rLat <- sInputFile[iCount,2]
     rLon <- sInputFile[iCount,3]
     
-    if(class(sRECEIVERID)=="numeric"){
+    if(class(sRECEIVERID)=="integer"){
       if (iCount > 1)
       {
         # compute distance from previous point
