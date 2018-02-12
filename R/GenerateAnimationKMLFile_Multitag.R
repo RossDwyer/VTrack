@@ -1,8 +1,6 @@
 GenerateAnimationKMLFile_Multitag <- 
-  function (sInputFile,sPointsFile,sOutputFile,sLocation="RECEIVERID") 
+function (sInputFile,sPointsFile,sOutputFile,sLocation="RECEIVERID") 
 {
-  
-  #sInputFile=VcrocsY;sPointsFile=VR2W.dfY;sOutputFile="KML/Croc200814_presence.kml";sLocation="STATIONNAME"
   
   COUNT <- LOCATION <- CRS <- NULL
   
@@ -25,4 +23,3 @@ GenerateAnimationKMLFile_Multitag <-
   kml(Multitag, file = sOutputFile, shape = "http://maps.google.com/mapfiles/kml/pal2/icon18.png", 
       colour = COUNT, size = COUNT, alpha = 0.75, labels = LOCATION)
 }
-

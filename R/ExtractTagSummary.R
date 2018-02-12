@@ -1,5 +1,5 @@
 ExtractTagSummary <- 
-  function (sInputFile,sLocation="RECEIVERID") 
+function (sInputFile,sLocation="RECEIVERID") 
 {
   TransmitterList <- ExtractUniqueValues(sInputFile, 2)
   fExtractsummaryid <- function(i) {

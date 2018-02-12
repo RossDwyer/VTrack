@@ -1,5 +1,5 @@
 ReadInputData <-
-function(infile,iHoursToAdd=0,fAATAMS=FALSE,fVemcoDualSensor=FALSE,dateformat=NULL,sVemcoFormat='Default')
+function(infile,iHoursToAdd=0,fIMOSATF=FALSE,fVemcoDualSensor=FALSE,dateformat=NULL,sVemcoFormat='Default')
 {
 
   header.row <- c("DATETIME","TRANSMITTERID","SENSOR1","UNITS1","RECEIVERID","STATIONNAME")
@@ -14,7 +14,7 @@ function(infile,iHoursToAdd=0,fAATAMS=FALSE,fVemcoDualSensor=FALSE,dateformat=NU
   sDateTime <- newDate + (iHoursToAdd * 3600)
   
   # write the relevant fields to the output file discarding irrelevant fields
-  if (fAATAMS==TRUE)
+  if (fIMOSATF==TRUE)
   {
     #  input data is in AATAMS format; SENSOR1 & UNITS1 are absent
     newdat <- data.frame(sDateTime,as.character(infile[,6]),"","",as.character(infile[,5]),as.character(infile[,2]))

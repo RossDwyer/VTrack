@@ -1,7 +1,7 @@
-GenerateAnimationKMLFile_Track <- 
-  function (sInputFile, sid, sPointsFile, sOutputFile, sTrackColour,sLocation="RECEIVERID") 
+GenerateAnimationKMLFile_Track <-
+function (sInputFile, sid, sPointsFile, sOutputFile, sTrackColour,sLocation="RECEIVERID") 
 {
-  #TransmitterList <- ExtractUniqueValues(sInputFile, 2)
+  TransmitterList <- ExtractUniqueValues(sInputFile, 2)
   sInputFile2 <- ExtractData(sInputFile, sQueryTransmitterList = sid)
   sInputFile2 <- merge(sInputFile2, sPointsFile, by.x = sLocation, 
                        by.y = "LOCATION")
