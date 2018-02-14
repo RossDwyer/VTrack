@@ -28,6 +28,7 @@ export(
   GenerateAnimationKMLFile_Track,
   GenerateCircuitousDistance,
   GenerateDirectDistance,
+  GenerateLeastCostDistance,
   NonResidenceExtractId,
   ReadInputData,
   ReturnVR2Distance,

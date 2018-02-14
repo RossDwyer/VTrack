@@ -1,6 +1,6 @@
 # VTrack
 
-A Collection of R Functions for the Analysis of Passive Acoustic Telemetry Data collected vy VEMCO equipment
+A Collection of R Functions for the Analysis of Passive Acoustic Telemetry Data Collected by VEMCO Acoustic Tracking Equipment
 
 Designed to facilitate the assimilation, analysis and synthesis of animal location and movement data collected by the VEMCO suite of acoustic transmitters and receivers. As well as database and geographic information capabilities the principal feature of VTrack is the qualification and identification of ecologically relevant events from the acoustic detection and sensor data. This procedure condenses the acoustic detection database by orders of magnitude, greatly enhancing the synthesis of acoustic detection data.
 

@@ -54,7 +54,7 @@ Vcrocs <- ReadInputData(infile=crocs,
                         dateformat = NULL,
                         sVemcoFormat='1.0')
 
-# Load Wenlock points file and generate circuitous distance matrix
+# Load Wenlock points file
 data(PointsDirect_crocs)
 
 # Set working directory (in this case a temporary directory)
