@@ -20,6 +20,7 @@ export(
   ComputeDistance,
   ExtractData,
   ExtractRecSummary,
+  ExtractStationSummary,
   ExtractTagSummary,
   ExtractUniqueValues,
   GenerateAnimationKMLFile,

@@ -1,16 +1,16 @@
 \name{ReadInputData}
 \alias{ReadInputData}
 \title{Read in a Raw VEMCO or AATAMS Data File into a VTrack Archive}
-\description{ReadInputData extracts single or dual sensor data from a raw VEMCO or AATAMS file to a VTrack structured data frame.}
+\description{ReadInputData extracts single or dual sensor data from a raw VEMCO or IMOS-ATF exported file to a VTrack structured data frame.}
 \usage{
-ReadInputData(infile, iHoursToAdd=0, fAATAMS=FALSE, fVemcoDualSensor=FALSE, 
+ReadInputData(infile, iHoursToAdd=0, fIMOSATF=FALSE, fVemcoDualSensor=FALSE, 
     dateformat = NULL, sVemcoFormat='Default')
 }
 \arguments{
   \item{infile }{a data frame containing VEMCO/AATAMS tracking data} 
   \item{dateformat }{an optional string containing the format of the \code{Date.Time} field}
   \item{iHoursToAdd }{the number of hours to add/subtract to convert the time-zone from Greenwich Mean Time (GMT)}
-  \item{fAATAMS }{logical. If data frame is in AATAMS format (\code{fAATAMS = TRUE}), \code{fVemcoDualSensor} and \code{sVemcoFormat} are ignored}
+  \item{fIMOSATF }{logical. If data frame is in IMOS-ATF exported format (\code{fIMOSATF = TRUE}), \code{fVemcoDualSensor} and \code{sVemcoFormat} are ignored}
   \item{fVemcoDualSensor }{ logical. If VEMCO file contains single sensor data (\code{FALSE}), if dual sensor data (\code{TRUE})}
   \item{sVemcoFormat }{an optional string containing the format of the VEMCO file. The infile was exported from VUE in either old Version (\code{'1.0'}) format, or in the new (\code{'Default'}) format}
 }
@@ -32,7 +32,7 @@ data(crocs)
 # Convert data into the VTrack archive format 
 Vcrocs <- ReadInputData(infile=crocs,
                         iHoursToAdd=10,
-                        fAATAMS=FALSE,
+                        fIMOSATF=FALSE,
                         fVemcoDualSensor=FALSE,
                         dateformat=NULL,
                         sVemcoFormat='1.0')

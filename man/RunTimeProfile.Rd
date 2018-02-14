@@ -60,8 +60,6 @@
 data(crocs)
 Vcrocs <- ReadInputData(infile=crocs,
                         iHoursToAdd=10,
-                        fAATAMS=FALSE,
-                        fVemcoDualSensor=FALSE,
                         dateformat = NULL,
                         sVemcoFormat='1.0')
 

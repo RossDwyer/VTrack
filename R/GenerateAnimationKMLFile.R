@@ -1,9 +1,9 @@
 GenerateAnimationKMLFile <-
 function(sInputResidenceFile,
-                                     sInputNonResidenceFile,
-                                     sInputPointsFile,
-                                     sOutputFile,
-                                     sReceiverColour)
+         sInputNonResidenceFile,
+         sInputPointsFile,
+         sOutputFile,
+         sReceiverColour)
 {
   # This function constructs an animation file from the given NonResidence, Residence and Points files.
   

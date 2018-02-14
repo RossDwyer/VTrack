@@ -60,8 +60,6 @@ data(crocs)
 # Convert data into the VTrack archive format
 Vcrocs <- ReadInputData(infile=crocs,
                         iHoursToAdd=10,
-                        fAATAMS=FALSE,
-                        fVemcoDualSensor=FALSE,
                         dateformat = NULL,
                         sVemcoFormat='1.0')
 
