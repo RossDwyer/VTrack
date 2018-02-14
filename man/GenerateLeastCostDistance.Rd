@@ -17,6 +17,7 @@ a dataframe containing the \code{LOCATION} (i.e. the STATIONNAME or the RECEIVER
   \item{sTransition }{
 a Transition object generated from a RasterLayer using the gdistance R package
 }
+}
 
 \value{
 a 2x2 matrix containing the pairwise direct \code{DISTANCE} between each \code{LOCATION} minus the detection \code{RADIUS}. Distances are returned in kilometers
@@ -34,5 +35,5 @@ Ross Dwyer
 #data(PointsLeastCost_crocs)
 # Generate the Least Cost distance matrix
 #RasterDM <- GenerateLeastCostDistance(PointsLeastCost_crocs)
-
+}
 \keyword{spatial}

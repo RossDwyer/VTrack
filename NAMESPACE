@@ -13,6 +13,11 @@ importFrom(parallel,makeCluster)
 importFrom(doParallel,registerDoParallel)
 importFrom(doParallel,stopImplicitCluster)
 importFrom(parallel,stopCluster)
+importFrom(sp,coordinates)
+importFrom(sp,CRS)
+importFrom(sp,spDists)
+importFrom(sp,SpatialLinesLengths)
+importFrom(gdistance,shortestPath)
 
 # Export all external functions
 export(
