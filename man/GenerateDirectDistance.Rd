@@ -4,7 +4,7 @@
 Converts a Points File into a Distance Matrix Using Direct Distances Between Receivers or Stations
 }
 \description{
-This function calculates the straight line distance between a set of geographical coordinates and generates a matrix containing the distances between each of the ponts (i.e. receivers) minus the detection radius.
+This function calculates the straight line distance between a set of geographical coordinates and generates a matrix containing the distances between each of the points (i.e. receivers) minus the detection radius.
 }
 \usage{
 GenerateDirectDistance(sPointsFile)

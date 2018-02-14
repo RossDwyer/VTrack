@@ -36,7 +36,7 @@ Vcrocs <- ReadInputData(infile=crocs,
                         dateformat = NULL,
                         sVemcoFormat='1.0')
 
-# Extract summary table of receivers in the file
+# Extract summary table of receiver sstations in the file
 ExtractStationSummary(Vcrocs)
 }
 

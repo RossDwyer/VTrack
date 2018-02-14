@@ -4,7 +4,7 @@
 Function to Extract Summary Data for each Transmitter in the File 
 }
 \description{
-This function extracts summary data for each transmitter in the File 
+This function extracts summary data for each transmitter in the file 
 }
 \usage{
 ExtractTagSummary(sInputFile,sLocation)
