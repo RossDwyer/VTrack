@@ -38,7 +38,7 @@ the output is a .kml that can be viewed as an animation in Google Earth
 }
 
 \author{
-Ross Dwyer, Matthew Watts, Hamish Campbell
+Ross Dwyer
 }
 \examples{
 
