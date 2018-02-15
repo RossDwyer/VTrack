@@ -2,7 +2,7 @@ GenerateLeastCostDistance <-
 function(sPointsFile,sTransition)
 {
   xy <- coordinates(sPointsFile[,2:3])
-  SP <- SpatialPoints(xy,proj4string=CRS(proj4string(sTransition)))
+  SP <- SpatialPoints(xy,proj4string=crs(sTransition))
   
   # Initialise variables
   newDM <- matrix(0,nrow(xy),nrow(xy))
