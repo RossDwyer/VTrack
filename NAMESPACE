@@ -18,6 +18,7 @@ importFrom(sp,CRS)
 importFrom(sp,spDists)
 importFrom(sp,SpatialLinesLengths)
 importFrom(gdistance,shortestPath)
+importFrom(raster,crs)
 
 # Export all external functions
 export(
