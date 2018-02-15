@@ -32,7 +32,7 @@
 }
 
 \author{
-  Ross Dwyer, Matthew Watts, Hamish Campbell
+  Ross Dwyer
 }
 \examples{
   
