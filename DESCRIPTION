@@ -1,7 +1,7 @@
 Package: VTrack
 Type: Package
 Title: A Collection of Tools for the Analysis of Remote Acoustic Telemetry Data
-Version: 1.2.1
+Version: 1.4.1
 Date: 2018-02-14
 Author: Ross G. Dwyer, Mathew E. Watts, Hamish A. Campbell & Craig E. Franklin
 Maintainer: Ross Dwyer <ross.dwyer@uq.edu.au>
