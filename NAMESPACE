@@ -19,9 +19,13 @@ importFrom(sp,spDists)
 importFrom(sp,SpatialLinesLengths)
 importFrom(gdistance,shortestPath)
 importFrom(raster,crs)
+importFrom(plyr,ddply)
+importFrom(plyr,dlply)
+importFrom(lubridate,ymd_hms)
 
 # Export all external functions
 export(
+  COA,
   ComputeAzimuth,
   ComputeDistance,
   ExtractData,
