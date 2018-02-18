@@ -33,7 +33,7 @@ function(sPointsFile,sTransition)
   }
   newDM <- newDM/1000 #divide by 1000 to convert from m to km
   
-  sPointsFile[lower.tri(sPointsFile)] = t(sPointsFile)[lower.tri(sPointsFile)] # Make matrix symmetrical
+  newDM[lower.tri(newDM)] = t(newDM)[lower.tri(newDM)] # Make matrix symmetrical
   
   # Format and return the distance matrix
   DM <- as.character(sPointsFile$LOCATION)
