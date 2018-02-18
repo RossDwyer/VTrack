@@ -29,9 +29,11 @@ function(sPointsFile,sTransition)
       rDISTANCE[j] <- riverdist 
     }
     newDM[i,] <- rDISTANCE
-    print(paste0(i,"of ",nrow(xy)," receivers calculated"))
+    print(paste0(i," of ",nrow(xy)," receivers calculated"))
   }
   newDM <- newDM/1000 #divide by 1000 to convert from m to km
+  
+  sPointsFile[lower.tri(sPointsFile)] = t(sPointsFile)[lower.tri(sPointsFile)] # Make matrix symmetrical
   
   # Format and return the distance matrix
   DM <- as.character(sPointsFile$LOCATION)
