@@ -1,4 +1,4 @@
-# VTrack 1.5
+# VTrack 1.5.1
 
 * Updated functionality to better handle receiver station names
 * `ExtractStationSummary()` function added to package

@@ -4,7 +4,7 @@
 Converts a Points File into a Distance Matrix Using an Transition Layer Generated from a Rasterised version of the Study Area
 }
 \description{
-This function calculates the distance between a set of geographical coordinates and generates a matrix containing the distances between each of the points.
+This function calculates the distance between a set of geographical coordinates and generates a matrix containing the distances between each of the points. In development.
 }
 \usage{
 GenerateLeastCostDistance(sPointsFile,sTransition)
@@ -31,9 +31,15 @@ Ross Dwyer
 }
 
 \examples{
+#WaterRaster <- raster("wenlock raster UTM.tif") # Load the raster
+#tr <- transition(WaterRaster, 
+#                 transitionFunction = mean, 
+#                 directions = 8) # Create a Transition object from the raster
+
 # Load the points file
 #data(PointsLeastCost_crocs)
 # Generate the Least Cost distance matrix
-#RasterDM <- GenerateLeastCostDistance(PointsLeastCost_crocs)
+#RasterDM <- GenerateLeastCostDistance(PointsLeastCost_crocs, 
+#                                      tr)
 }
 \keyword{spatial}
