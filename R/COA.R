@@ -83,4 +83,3 @@ COA<-function (ATTdata, timestep=60, split=FALSE){
   return(cenac)
 }
 
-

@@ -7,3 +7,5 @@
 * `dispersalSummary()` function added to package
 * `HRSummary()` function added to package
 * `setupData()` function added to package
+
+

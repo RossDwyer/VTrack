@@ -44,3 +44,4 @@ head(COAdata)
 \seealso{
 Input data needs to be setup using \code{\link{setupData}}. 'COA' object required for \code{\link{HRSummary}}
 }
+                                                                                 
