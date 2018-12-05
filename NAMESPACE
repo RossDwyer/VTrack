@@ -1,24 +1,24 @@
 # Import all packages listed as Imports or Depends
-import(
-  foreach)
+import(foreach)
+import(adehabitatHR)
+import(ggplot2)
+import(maptools)
+importFrom(adehabitatLT,as.ltraj)
+importFrom(dplyr,left_join,mutate,group_by,ungroup,summarize,summarise,select,transmute,do,'%>%',n,n_distinct,first,filter,as_tibble,group_size)
+importFrom(sp,SpatialPoints,proj4string,coordinates,CRS,spDists,spDistsN1,SpatialLinesLengths,gridded,spTransform)
+importFrom(sp,"gridded<-")
+importFrom(sp,"coordinates<-")
+importFrom(raster,crs,projection,projectRaster,stack,raster,extent)
+importFrom(raster,"projection<-")
+importFrom(lubridate,ymd_hms,ymd,days_in_month,date)
 importFrom(plotKML,kml)
-importFrom(sp,SpatialPoints)
-importFrom(sp,proj4string)
 importFrom(spacetime,STIDF)
-importFrom(stats,aggregate)
-importFrom(stats,sd)
-importFrom(utils,read.csv)
-importFrom(stats,na.omit)
-importFrom(parallel,makeCluster)
-importFrom(doParallel,registerDoParallel)
-importFrom(doParallel,stopImplicitCluster)
-importFrom(parallel,stopCluster)
-importFrom(sp,coordinates)
-importFrom(sp,CRS)
-importFrom(sp,spDists)
-importFrom(sp,SpatialLinesLengths)
+importFrom(stats,aggregate,sd,na.omit)
+importFrom(parallel,makeCluster,stopCluster)
+importFrom(doParallel,registerDoParallel,stopImplicitCluster)
 importFrom(gdistance,shortestPath)
-importFrom(raster,crs)
+importFrom(grDevices, dev.new)
+importFrom(utils, setTxtProgressBar, txtProgressBar, read.csv)
 
 # Export all external functions
 export(
@@ -40,5 +40,11 @@ export(
   ReturnVR2Distance,
   RunResidenceExtraction,
   RunSensorEventExtraction,
-  RunTimeProfile
-)
+  RunTimeProfile,
+  COA,
+  HRSummary,
+  HRprocess,
+  abacusPlot,
+  detectionSummary,
+  dispersalSummary,
+  setupData)
