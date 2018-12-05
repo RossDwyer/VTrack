@@ -1,7 +1,11 @@
-# VTrack 1.5.1
+# VTrack 2.0
 
-* Updated functionality to better handle receiver station names
-* `ExtractStationSummary()` function added to package
-* `GenerateLeastCostDistance()` function added to package
-* `COA()` function provided by Vinay Udyawer
-  
+* Added ATT (Animal Tracking Toolbox) collection of functions to VTrack. Includes the functions
+* `abacusPlot()` function added to package
+* `COA()` function added to package
+* `detectionSummary()` function added to package
+* `dispersalSummary()` function added to package
+* `HRSummary()` function added to package
+* `setupData()` function added to package
+
+

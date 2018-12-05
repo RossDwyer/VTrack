@@ -5,7 +5,7 @@
 Passive Acoustic Monitoring of Saltwater Crocodiles 
 }
 \description{
-This VEMCO dataset contains the relocations of 3 saltwater crocodiles monitored between 09 September 2008 to 31 December 2008 on the Wenlock River, Cape York, Queensland, Australia. Data supplied H. Campbell from the School of Biological Sciences, The University of Queensland, Queensland, Australia.
+This VEMCO dataset in the 1.0 format  contains the relocations of 3 saltwater crocodiles monitored between 09 September 2008 to 31 December 2008 on the Wenlock River, Cape York, Queensland, Australia. Data supplied H. Campbell from the School of Biological Sciences, The University of Queensland, Queensland, Australia.
 }
 \usage{data(crocs)}
 \format{
@@ -35,7 +35,7 @@ The coordinates are given in decimal degrees WGS 84, time is GMT +10 hrs
 }
 
 \examples{
-#load the data and print the first few rows of the data frame
+#load the croc dataset (Vemco VUE 1.0 format) and print the first few rows of the data frame
 data(crocs)
 head(crocs)
 }
