@@ -2,7 +2,7 @@
 \alias{IMOSdata}
 \docType{data}
 \title{
-IMOSdata
+Example detection dataset sourced from IMOS ATF
 }
 \description{
 This dataset contains an example dataset containing 11 tagged Tiger sharks tracked at Heron and One Tree Island, Australia, extracted from the Integrated Marine Oberving System's Animal Tracking Facility (IMOS ATF). The data is in the default format used by the IMOS ATF containing the relocations of coded tags across an array of acoustic hydrophones. The data also contains metadata associated with tag and receiver deployments.

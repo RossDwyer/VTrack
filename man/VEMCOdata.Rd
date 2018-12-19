@@ -2,7 +2,7 @@
 \alias{VEMCOdata}
 \docType{data}
 \title{
-Passive Acoustic Monitoring of 
+Example detection dataset exported from a VEMCO VUE database
 }
 \description{
 This VEMCO dataset is an example dataset containing 11 tagged Tiger sharks tracked at Heron and One Tree Island, Australia. The data is in the default format used by VEMCO VUE software containing the relocations of coded tags across an array of acoustic hydrophones.

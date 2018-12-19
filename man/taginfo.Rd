@@ -2,10 +2,10 @@
 \alias{taginfo}
 \docType{data}
 \title{
-File Containing tagged animal information 
+Example dataset containing tag metadata associated with \code{IMOSdata} and \code{VEMCOdata} datasets
 }
 \description{
-This file contains the tagging data species information
+This dataset contains an example of tag metadata required for the functioning of the ATT operations. The example tags here is associated with Tiger sharks monitored at Heron and One Tree Island, Australia (see \code{IMOSdata} or \code{VEMCOdata}). The data is in the default format used by the IMOS ATF containing the metadata associated with transmitter deployments.
 }
 \usage{data(taginfo)}
 \format{
