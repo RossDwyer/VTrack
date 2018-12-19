@@ -1,7 +1,5 @@
 
-<br>
 <img src="vignettes/images/banner1.png"/>
-<br>
 
 # VTrack
 
@@ -18,12 +16,12 @@ The VTrack package was built to facilitate the assimilation, analysis and synthe
 The `VTrack` package can be found on [CRAN](https://cran.r-project.org/web/packages/VTrack/index.html)
 
 The package can be installed directly from R:
-```{r, eval=FALSE}
+```ruby
 install.packages("VTrack")
 ```
 
 The development version of the package can is also available via this Github page:
-```{r, eval=FALSE}
+```ruby
 install.packages("devtools")
 devtools::install_github("rossdwyer/VTrack")
 ```
