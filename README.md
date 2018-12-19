@@ -9,7 +9,6 @@ The VTrack package was built to facilitate the assimilation, analysis and synthe
 
 <br>
 <img src="vignettes/images/banner2.png"/>
-<br>
 
 # Installation and usage
 
@@ -30,7 +29,6 @@ A brief overview of VTrack functions and its use can be found [here](https://www
 
 <br>
 <img src="vignettes/images/banner3.png"/>
-<br>
 
 # New Features
 
