@@ -4,7 +4,7 @@ author: Vinay Udyawer, Ross Dwyer, Xavier Hoenner
 date: Dec 19, 2018
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Animal Tracking Toolbox Quick Guide}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
