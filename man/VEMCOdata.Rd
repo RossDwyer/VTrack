@@ -24,10 +24,7 @@ This VEMCO dataset is an example dataset containing 11 tagged Tiger sharks track
   }
 }
 \details{
-The coordinates are given in decimal degrees WGS 84, time is in UTC
-}
-\source{
-\url{https://animaltracking.aodn.org.au}
+The coordinates are given in decimal degrees WGS 84, time is in UTC/GMT
 }
 
 \examples{

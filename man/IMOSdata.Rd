@@ -5,60 +5,60 @@
 IMOSdata
 }
 \description{
-This IMOS ATF dataset contains... Data supplied by....
+This dataset contains an example dataset containing 11 tagged Tiger sharks tracked at Heron and One Tree Island, Australia, extracted from the Integrated Marine Oberving System's Animal Tracking Facility (IMOS ATF). The data is in the default format used by the IMOS ATF containing the relocations of coded tags across an array of acoustic hydrophones. The data also contains metadata associated with tag and receiver deployments.
 }
 \usage{data(IMOSdata)}
 \format{
-  A data frame with X observations on the following X variables.
+  A data frame with 78753 observations on the following 41 variables.
   \describe{
-    \item{\code{FID }}{a numeric vector containing }
-    \item{\code{id }}{a numeric vector containing }    
-    \item{\code{file_id }}{a numeric vector containing }
-    \item{\code{url }}{a numeric vector containing }
-    \item{\code{transmitter_id }}{a numeric vector containing }
-    \item{\code{tag_id }}{a numeric vector containing }
-    \item{\code{release_id }}{a numeric vector containing .}
-    \item{\code{tag_project_name }}{a numeric vector containing .}
-    \item{\code{common_name }}{the species being studied. \code{NA} suggests that no species name was supplied}
-    \item{\code{scientific_name }}{the species being studied. \code{NA} suggests that no species name was supplied}   
-    \item{\code{installation_name }}{a factor containing the name of the installation }
-    \item{\code{station_name }}{a factor containing the name of the installatio}  
-    \item{\code{receiver_name }}{a factor containing the name of the installation}    
-    \item{\code{detection_timestamp }}{a factor containing }     
-    \item{\code{longitude }}{a numeric vector containing the location's longitude in decimal degrees}
-    \item{\code{latitude }}{a numeric vector containing the location's latitude in decimal degree}
-    \item{\code{sensor_value }}{a numeric vector containing }      
-    \item{\code{sensor_unit }}{a numeric vector containing } 
-    \item{\code{FDA_QC }}{a numeric vector containing }
-    \item{\code{Velocity_QC }}{a numeric vector containing } 
-    \item{\code{Distance_QC }}{a numeric vector containing } 
-    \item{\code{DetectionDistribution_QC }}{a numeric vector containing } 
-    \item{\code{DistanceRelease_QC }}{a numeric vector containing } 
-    \item{\code{ReleaseDate_QC }}{a numeric vector containing }     
-    \item{\code{ReleaseLocation_QC }}{a numeric vector containing }         
-    \item{\code{Detection_QC }}{a numeric vector containing }     
-    \item{\code{release_longitude }}{a numeric vector containing } 
-    \item{\code{release_latitude }}{a numeric vector containing } 
-    \item{\code{ReleaseDate }}{a numeric vector containing } 
-    \item{\code{sensor_slope }}{a numeric vector containing } 
-    \item{\code{sensor_intercept }}{a numeric vector containing} 
-    \item{\code{sensor_type }}{a numeric vector containing } 
-    \item{\code{tag_sensor_unit }}{a numeric vector containing }
-    \item{\code{tag_model_name }}{a numeric vector containing }   
-    \item{\code{tag_serial_number }}{a numeric vector containing }   
-    \item{\code{tag_expected_life_time_days }}{a numeric vector containing }  
-    \item{\code{tag_status }}{a numeric vector containing}      
-    \item{\code{sex }}{a numeric vector containing}      
-    \item{\code{measurement }}{a numeric vector }      
-    \item{\code{dual_sensor_tag }}{a numeric vector containing }     
-    \item{\code{geom }}{a numeric vector containing }      
+    \item{\code{FID }}{a character vector containing a unique ID used for internal data management within the IMOS ATF database. Not required for the functioning of the ATT operations. }
+    \item{\code{id }}{a numeric vector containing a unique ID used for internal data management within the IMOS ATF database. Not required for the functioning of the ATT operations. }    
+    \item{\code{file_id }}{a numeric vector containing a unique ID used for internal data management within the IMOS ATF database. Not required for the functioning of the ATT operations. }
+    \item{\code{url }}{a character vector containing the url location for internal data management within the IMOS ATF database. Not required for the functioning of the ATT operations. }
+    \item{\code{transmitter_id }}{a factor containing the combination of code map and ping ID for each transmitter deployed (e.g. A69-9002-12345). Note: Dual sensor tags are often associated with multiple transmitter IDs. Required field. }
+    \item{\code{tag_id }}{a factor unique ID for each tagged individual (e.g. 4462716). Note: This field unifies detections for animals tagged with dual sensor tags that have multiple transmitter_id codes. Required field. }
+    \item{\code{release_id }}{a numeric vector containing a unique ID for animal releases used for internal data management within the IMOS ATF database. This field is used to differentiate transmitters that have been retrieved and reused across multiple animals. Not required for the functioning of the ATT operations. }
+    \item{\code{tag_project_name }}{a factor containing the name of the project associated with each transmitter deployment. Not required for the functioning of the ATT operations. }
+    \item{\code{common_name }}{the common name for the species being studied. \code{NA} suggests that no species name was supplied. Not required for the functioning of the ATT operations. }
+    \item{\code{scientific_name }}{the scientific name for the species being studied. \code{NA} suggests that no species name was supplied. Not required for the functioning of the ATT operations. }   
+    \item{\code{installation_name }}{a factor containing the name of installation on which the transmitter was detected. An installation typically consists of multiple receiving stations (e.g. One Tree Island). Not required for the functioning of the ATT operations. }
+    \item{\code{station_name }}{a factor containing the name of receiving station on which the transmitter was detected. Acoustic receivers typically gets deployed multiple times at the same station (e.g. OT-7). Required field. }  
+    \item{\code{receiver_name }}{a factor containing the name of acoustic receiver, combines receiver model with its serial number (e.g. VR2W-123456). Required field. }    
+    \item{\code{detection_timestamp }}{a vector of type POSIXct in Co-ordinated Universal Time (UTC)/ Greenwich Mean Time contining date and time of tag detection (yyyy-mm-dd HH:MM:SS). Required field. }     
+    \item{\code{longitude }}{a numeric vector containing the location's longitude in decimal degrees. Required field. }
+    \item{\code{latitude }}{a numeric vector containing the location's latitude in decimal degree. Required field. }
+    \item{\code{sensor_value }}{a numeric vector containing values from VEMCO sensor tags (e.g. pressure/depth, acceleration, temperature). }      
+    \item{\code{sensor_unit }}{a character vector conatining the units pertaining to the sensor value (e.g. m, ms-2, degrees celcius). } 
+    \item{\code{FDA_QC }}{a numeric vector containing the IMOS ATF quality control flag generated by the False detection algorithm (1:passed, 2:failed). Not required for the functioning of the ATT operations. }
+    \item{\code{Velocity_QC }}{a numeric vector containing QC flag. Velocity from previous and next detections both 10 m.s-1? (1:yes, 2:no). Not required for the functioning of the ATT operations.  } 
+    \item{\code{Distance_QC }}{a numeric vector containing QC flag. Distance from previous and next detections both < 1000 km? (1:yes, 2:no). Not required for the functioning of the ATT operations.  } 
+    \item{\code{DetectionDistribution_QC }}{a numeric vector containing QC flag. Detection occurred within expert distribution area? (1:yes, 2:no, 3:test not performed). Not required for the functioning of the ATT operations.  } 
+    \item{\code{DistanceRelease_QC }}{a numeric vector containing QC flag. Detection occurred within 500 km of release location? (1:yes, 2:no). Not required for the functioning of the ATT operations.  } 
+    \item{\code{ReleaseDate_QC }}{a numeric vector containing QC flag. Detection occurred before the tag release date? (1:yes, 2:no). Not required for the functioning of the ATT operations.  }     
+    \item{\code{ReleaseLocation_QC }}{a numeric vector containing QC flag. Transmitter release lat/long coordinates within expert distribution area and/or within 500 km from first detection? (1:yes, 2:no). Not required for the functioning of the ATT operations.  }         
+    \item{\code{Detection_QC }}{a numeric vector containing a composite detection flag indicating the likely validity of detections based on the previous QC operations (1:valid detection, 2:probably valid detection, 3:probably bad detection, 4:bad detection). Not required for the functioning of the ATT operations.  }     
+    \item{\code{release_longitude }}{a numeric vector containing the longitude at which transmitter was deployed (d.ddd˚). } 
+    \item{\code{release_latitude }}{a numeric vector containing the latitude at which transmitter was deployed (d.ddd˚) } 
+    \item{\code{ReleaseDate }}{a vector of type POSIXct containing date and time at which tag was deployed (yyyy-mm-dd HH:MM:SS). } 
+    \item{\code{sensor_slope }}{a numeric vector containing the slope used in the linear equation to convert raw sensor measurements. This value is provided by transmitter manufacturer. } 
+    \item{\code{sensor_intercept }}{a numeric vector containing the intercept used in the linear equation to convert raw sensor measurements. This value is provided by transmitter manufacturer. } 
+    \item{\code{sensor_type }}{a character vector indicating type of sensor (Can be: pinger, temperature, pressure, or accelerometer). } 
+    \item{\code{tag_sensor_unit }}{a character vector conatining the units pertaining to the sensor value (e.g. m, ms-2, degrees celcius). }
+    \item{\code{tag_model_name }}{a character vector indicating tag model (e.g. V9, V13-TP, V16-P, V9-A). }   
+    \item{\code{tag_serial_number }}{a numeric vector containing manufacturers serial number for deployed transmitter (e.g. 1083971). }   
+    \item{\code{tag_expected_life_time_days }}{a numeric vector containing the expected life time of the transmitter (days). This estimated battery life is provided by transmitter manufacturer. }  
+    \item{\code{tag_status }}{a character vector indicating the status of transmitter (e.g. deployed, lost, etc). }      
+    \item{\code{sex }}{a character vector containing sex of tagged animal, \code{NA} suggests that sex of tagged animal was not supplied. }      
+    \item{\code{measurement }}{a numeric vector containing morphometric measurement of tagged animal (e.g. Fork length, Stretch total length, Carapace width, Snout-vent length), \code{NA} suggests that measurement of tagged animal was not supplied. }      
+    \item{\code{dual_sensor_tag }}{a logical vector indicating if the transmitter was a dual sensor tag. }     
+    \item{\code{geom }}{a coordinate vector containing coordinates of detection used for internal data management within the IMOS ATF database. Not required for the functioning of the ATT operations.  }      
   }
 }
 \details{
-The coordinates are given in decimal degrees WGS 84, time is GMT +10 hrs
+The coordinates are given in decimal degrees WGS 84, time is UTC/GMT
 }
 \source{
-\url{http://imos.org.au/facilities/animaltracking/}
+\url{https://animaltracking.aodn.org.au}
 }
 
 \examples{
