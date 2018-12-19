@@ -1,0 +1,629 @@
+---
+title: Animal Tracking Toolbox Quick Guide
+author: Vinay Udyawer, Ross Dwyer, Xavier Hoenner
+date: Dec 19, 2018
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Background
+
+
+Passive telemetry studies use detection patterns of a tagged animal
+within a fixed array to understand movement patterns, habitat use and
+activity space. Raw detection data are typically used to calculate
+metrics of detection (i.e. number of detections, number of days
+detected, number of receivers tag was detected on, index of residence),
+dispersal (e.g. distances and bearings between consecutive detections;
+step distances and turning angles, distances and bearings between each
+detection and release site) and activity space (e.g. Minimum Convex
+Polygon MCP area, Kernel Utilisation Distribution area), however the
+techniques and parameters used to calculate these metrics are often
+customised to each study making cross-study comparisons unreliable. Here
+we provide a tool to facilitate a standardised workflow to calculate these
+commonly used metrics.
+
+<br>
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('images/Fig1b.png')
+```
+<sub>Figure 1. Visual summary of workflow to calculate standardised metrics using the Animal Tracking Toolbox.</sub>
+
+<br>
+
+The Animal Tracking Toolbox (ATT) is a collection of functions created
+in the R statistical environment (R Development Core Team 2018) that
+calculates standardised metrics of dispersal and activity space from
+passive telemetry to enable direct comparisons between animals tracked
+within the same study and between studies or locations. The functions
+uses detection data alongside tag metadata and receiver
+station information to calculate a range of standardised movement and
+activity space metrics. This toolbox can be used to calculate and
+visualise standardised metrics of movement and activity space within and
+between species tracked at multiple locations.
+
+<br>
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('images/Fig2.png')
+```
+<sub>Figure 2. Overall activity space metric plots for multiple species tagged at multiple locations (a) Yellowfin Bream (n=1), (b) Yellowtail Kingfish (n=1), (c) Grey Reef Shark (n=1) and (d) Bull Shark (n=1) output using the ATT. Coloured points represent Centres of Activity (60 min time steps) with darker shapes representing core activity space (50% contour of Brownian bridge kernel utilisation distribution; BBKUD) and lighter shapes representing the extent of activity space (95% contour of BBKUD). Black polygons represent overall Minimum Convex Polygons from detection data. Open circles represent locations of VR2W receivers deployed within the IMOS ATF infrastructure and associated research installations.</sub>
+
+<br>
+
+The ATT was developed to preprocess and calculate standardised metrics
+of dispersal and activity space from large-scale detection data housed in
+the Integrated Marine Observing System’s Animal Tracking Facility (IMOS
+ATF) national data repository. The ATT accepts detection data exported from the IMOS ATF database (referred
+to as `IMOSdata` here, and can be accessed through the [AODN portal](https://portal.aodn.org.au)). The ATT can also 
+be used to analyse data exported from the VEMCO data management software VUE (refered to as `VEMCOdata` here). We are currently working on additional
+functionality for using the ATT with detection data exported from other passive telemetry networks. 
+
+<br>
+
+This manual will outline the required data formats for input 
+tag detection data (either `IMOSdata` or `VEMCOdata`), associated tag metadata (referred to as `taginfo` 
+) and receiver station information (`statinfo`). This manual will
+also demonstrate how to run the function for a single tag as well as
+running the function for a large number of tags.
+
+# Installation
+
+The Animal Tracking Toolbox can be installed from the CRAN repository
+```{r, include=TRUE, eval=FALSE}
+install.packages("VTrack")
+
+## The development version can be also be accessed from GitHub:
+install.packages("devtools")
+devtools::install_github("rossdwyer/VTrack")
+```
+
+
+# Functions within the toolbox
+
+The Animal Tracking Toolbox is comprised of five main functions that work in series:
+
+1.  **`setData()`** sets up data and produces a single list 'ATT' object so detection data, tag metadata and station information are all in one place. Initialises data for use with other functions in the toolbox.
+
+2.  **`detectionSummary()`** calculates standard detection metrics using an 'ATT' object. Produces a list with detection metrics calculated over the full tag life and within user-defined temporal subset (i.e. monthly and weekly metrics).
+
+3.  **`dispersalSummary()`** calculates standard dispersal metrics using an 'ATT' object. Produces a tibble dataframe with dispersal distance and bearing measurements between consecutive detections as well as between each detection and release location (if provided in 'taginfo').
+
+4.  **`COA()`** estimates short-term Centers of Activity using an 'ATT' object. Based on technique described in [Simpfendorfer et al. 2002](http://www.nrcresearchpress.com/doi/abs/10.1139/f01-191#.WuggLS_L2XQ). Produces a 'COA' tibble dataframe object with centers of activity estimated within user-defined timesteps.
+
+5.  **`HRSummary()`** calculates standardised activity space metrics using a 'COA' object. Produces a list with activity space metrics calculated over the full tag life and within user-defined temporal subsets (i.e. monthly and weekly). Technique of calculating activity space metrics include minimum convex polygons (*MCP*), fixed kernel utilisation distributions (*fKUD*) or Brownian bridge kernel utilisation distributions (*BBKUD*). Cumulative metrics of activity space is also calculated with `cumulative` argument. Spatial polygons and raster objects for further plotting are also produced with `storepoly` argument.
+
+<br>
+
+In addition to these functions, there are additional functions to help plot detection summaries using an abacus plot (**`abacusPlot()`**). We are working on more functions to help visualise dispersal summaries and activity spaces calculated... Watch this space!!
+
+<br>
+
+# Input data formats
+
+Analysing passive telemetry data requires three sets of data: Tag detection data (refered to here as either `IMOSdata` or `VEMCOdata`, depending on data source); Tag metadata (`taginfo`); and Receiver metadata (`statinfo`). The ATT was developed to recognise field names from the IMOS ATF database and more generally from a VEMCO VUE database that is commonly used in the field of passive acoustic telemetry. These data formats are detailed below, and can be used as a guide to configure the tag detection data input if the VEMCO or IMOS ATF data formats are not used. The `taginfo` and `statinfo` data formats conforms to the metadata information stored on the IMOS ATF database, and similar formats should be used to store metadata information on animals tagged for analysing passive acoustic telemetry data.
+
+<br>
+
+## Tag detection data formats
+
+### VEMCO input format (`VEMCOdata`)
+
+| Data field | Description | Required field? |
+|:---------- |:----------- |:--------------- |
+| Date and Time (UTC) |	Date and time of tag detection (yyyy-mm-dd HH:MM:SS) | Yes |
+| Receiver |	Name of acoustic receiver, combines receiver model with its serial number (e.g. VR2W-123456) | Yes |
+| Transmitter |	Combination of code map and ping ID (eg. A69-1303-14503) | Yes |
+| Sensor Value |	Physical measurement recorded by a tag’s sensor, if applicable (If sensor data hasn’t been converted then sensor_unit = ‘ADC’ and values range from 0 to 255.) | Yes |
+| Sensor Unit |	Physical unit associated with sensor values (Either ‘ADC’, ‘°C’, ‘m’ or ‘m/s2’) | Yes |
+| Station Name |	Name of receiving station on which the transmitter was detected. Acoustic receivers typically gets deployed multiple times at the same station | Yes |
+| Latitude |	Latitude at which receiver was deployed and tag was detected (d.ddd˚) | Yes |
+| Longitude |	Longitude at which receiver was deployed and tag was detected (d.ddd˚) | Yes |
+| Transmitter Name |	Ping ID of transmitter deployed (e.g. 14503) | No |
+| Transmitter Serial |	Manufacturers serial number for deployed transmitter (e.g. 1126413) | No |
+
+<br>
+
+### IMOS ATF input format (`IMOSdata`)
+
+| Data field | Description            | Required field? |
+|:---------- |:---------------------- |:--------------- |
+| transmitter_id |	Combination of code map and ping ID. Dual sensor tags are associated with multiple transmitter IDs (e.g. A69-9002-12345) | Yes |
+| station_name |	Name of receiving station on which the transmitter was detected. Acoustic receivers typically gets deployed multiple times at the same station | Yes |
+| receiver_name |	Name of acoustic receiver, combines receiver model with its serial number (e.g. VR2W-123456) | Yes |
+| detection_timestamp |	Date and time of tag detection (yyyy-mm-dd HH:MM:SS) | Yes |
+| longitude |	Longitude at which receiver was deployed and tag was detected (d.ddd˚) | Yes |
+| latitude |	Latitude at which receiver was deployed and tag was detected (d.ddd˚) | Yes |
+| sensor_value |	Physical measurement recorded by a tag’s sensor, if applicable (If sensor data hasn’t been converted then sensor_unit = ‘ADC’ and values range from 0 to 255.) | Yes |
+| sensor_unit |	Physical unit associated with sensor values (Either ‘ADC’, ‘°C’, ‘m’ or ‘m/s2’) | Yes |
+| installation_name |	Name of installation on which the transmitter was detected. An installation typically consists of multiple receiving stations | No |
+| FDA_QC |	Quality control flag for the false detection algorithm (1:passed, 2:failed) | No |
+| Velocity_QC |	Velocity from previous and next detections both 10 m.s-1? (1:yes, 2:no) | No |
+| Distance_QC |	Distance from previous and next detections both < 1000 km? (1:yes, 2:no) | No |
+| DetectionDistribution_QC |	Detection occurred within expert distribution area? (1:yes, 2:no, 3:test not performed) | No |
+| DistanceRelease_QC |	Detection occurred within 500 km of release location? (1:yes, 2:no) | No |
+| ReleaseDate_QC |	Detection occurred before the tag release date? (1:yes, 2:no) | No |
+| ReleaseLocation_QC |	Tag release lat/long coordinates within expert distribution area and/or within 500 km from first detection? (1:yes, 2:no) | No |
+| Detection_QC |	Composite detection flag indicating the likely validity of detections (1:valid detection, 2:probably valid detection, 3:probably bad detection, 4:bad detection) | No |
+
+<br>
+
+## Tag metadata input format (`taginfo`)
+
+Tag metadata input format is based on IMOS ATF metadata structure
+
+| Data field | Description            | Required field? |
+|:---------- |:---------------------- |:--------------- |
+| tag_id |	Unique tag ID. Dual sensor tags will have different transmitter IDs but the same tag ID. This field is to ensure tags are associated with animals. Can include a character vector or numeric (e.g. "Tigger", A1343, 1345). Individual animals will be differentiated using the unique ID in this field, and will be used as labels in data outputs and graphs from the ATT functions | Yes |
+| transmitter_id |	Combination of code map and ping ID (e.g. . A69-9002-12345) | Yes |
+| scientific_name |	Tagged species scientific name | Yes |
+| common_name |	Tagged species common name | Yes |
+| tag_project_name |	Project name under which a tag was registered | Yes |
+| release_id |	Unique tag release ID. A given tag ID may be associated with several release IDs if it has been re-deployed. | Yes |
+| release_latitude |	Latitude at which tag was deployed (d.ddd˚) | Yes |
+| release_longitude |	Longitude at which tag was deployed (d.ddd˚ | Yes |
+| ReleaseDate |	Date and time at which tag was deployed (yyyy-mm-dd HH:MM:SS) | Yes |
+| tag_expected_life_time_days |	Tag expected life time (days) | Yes |
+| tag_status |	Tag status (e.g. deployed, lost, etc) | Yes |
+| sex |	Sex of tagged animal (if recorded) | Yes |
+| measurement |	Morphometric information of tagged animal (if recorded; e.g. Total length, weight) | Yes |
+| sensor_slope |	Slope used in the linear equation to convert raw sensor measurements | No |
+| sensor_intercept |	Intercept used in the linear equation to convert raw sensor measurements | No |
+| sensor_type |	Type of sensor (Can be pinger, temperature, pressure, or accelerometer) | No |
+| sensor_unit |	Physical unit associated with sensor values (Either ‘ADC’, ‘°C’, ‘m’ or ‘m/s2’) | No |
+| tag_model_name |	Tag model (e.g. V9, V13-TP, V16-P, V9-A) | No |
+| tag_serial_number |	Manufacturers serial number for deployed transmitter (e.g. 1126413) | No |
+| dual_sensor_tag |	Is the tag a dual sensor tag (TRUE/FALSE) | No |
+
+<br>
+
+## Receiver metadata input format (`statinfo`)
+
+Receiver metadata input format is based on IMOS ATF metadata structure
+
+| Data field | Description            | Required field? |
+|:---------- |:---------------------- |:--------------- |
+| station_name | Name of receiving station. Acoustic receivers typically gets deployed multiple times at the same station. Station name will be used to differentiate reciever stations rather than Receiver serial numbers as often multiple units are used for each station location (i.e. either replacing damaged receivers or cycling through different receivers when downloading data) | Yes |
+| receiver_name | Name of acoustic receiver, combines receiver model with its serial number (e.g. VR2W-123456) | Yes |
+| installation_name | Name of installation of which receiver is part of. An installation typically consists of multiple receiving stations | Yes |
+| project_name | Project name under which the receiver was registered under | Yes |
+| deploymentdatetime_timestamp | Date and time at which receiver was deployed (yyyy-mm-dd HH:MM:SS) | Yes |
+| recoverydatetime_timestamp | Date and time at which receiver was recovered/removed (yyyy-mm-dd HH:MM:SS) | Yes |
+| station_latitude | Latitude at which receiver was deployed (d.ddd˚) | Yes |
+| station_longitude | Longitude at which receiver was deployed (d.ddd˚) | Yes |
+| status | Status of receiver (e.g. deployed, lost, damaged, recovered, etc) | Yes |
+
+<br>
+
+# Usage
+
+## Load the VTrack library
+```{r, eval=FALSE, message=FALSE}
+library(VTrack)
+```
+```{r, eval=TRUE, message=FALSE, include=FALSE}
+library(ATT)
+```
+
+## Setup data for smooth functioning with other ATT functions
+```{r, eval=TRUE, message=FALSE, warning=FALSE}
+## Input example datasets
+data(IMOSdata)  ## Detection data exported from IMOS data repository
+data(VEMCOdata) ## Detection data exported from a VUE database
+data(taginfo)
+data(statinfo)
+
+## Setup data for use with the Animal Tracking Toolbox
+ATTdata<- setupData(Tag.Detections = IMOSdata, 
+                    Tag.Metadata = taginfo, 
+                    Station.Information = statinfo, 
+                    source="IMOS")
+```
+
+
+## Calculating detection metrics
+```{r, eval=TRUE, message=FALSE, warning=FALSE}
+## Calculate detecion metrics with monthly subsets chosen
+detSum<-detectionSummary(ATTdata,  
+                         sub = "%Y-%m")
+```
+
+`detectionSummary()` outputs a list object with two components, `$Overall`: detection metrics for the full period of the tag and `$Subsetted`: detection metrics for weekly or monthly temporal subsets depending on the `sub` argument. 
+
+```{r, eval=TRUE}
+head(detSum)
+```
+```{r, eval=FALSE}
+## Accessing metrics of detection for full tag life
+detSum$Overall
+
+## Accessing metrics of detection for each temporal subset
+detSum$Subsetted
+```
+<br>
+
+## Create an abacus plot
+```{r, eval=FALSE}
+abacusPlot(ATTdata)
+```
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('images/Fig3.png')
+```
+<br>
+```{r, eval=FALSE}
+## Create a facetted abacus plot for individuals 77523274 and 77523147
+abacusPlot(ATTdata, 
+           id=c("77523274","77523147"), 
+           facet=TRUE)
+```
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('images/Fig4.png')
+```
+<br>
+
+## Calculating dispersal metrics
+
+```{r, eval=FALSE}
+## Calculate dispersal metrics
+dispSum<-dispersalSummary(ATTdata)
+```
+
+```{r, echo=FALSE, results='hide', fig.keep='all', message = FALSE}
+## Calculate dispersal metrics
+dispSum<-dispersalSummary(ATTdata)
+```
+
+`dispersalSummary()` outputs a tibble data frame object with step distances and step bearings calculated for each detection. The number of rows will be equal to the raw detection data, therefore it may take longer to process dispersal metrics for a large number of animals or for large datasets.
+
+```{r, eval=TRUE, message=FALSE, warning=FALSE}
+## Accessing metrics of dispersal
+dispSum
+```
+<br>
+
+## Calculating activity space metrics
+```{r, eval=TRUE, message=FALSE, warning=FALSE}
+## First, estimate Short-term center of activities
+COAdata<-COA(ATTdata, 
+             timestep = 60, ## timestep bin used to estimate centers of activity (in minutes)
+             split = TRUE)
+```
+
+`COA()` produces a single tibble data frame with centers of activity positions estimated for each timestep bin when `split = FALSE`; and a list object with centers of activity positions for each individual when `split = TRUE`.
+
+```{r, eval=TRUE, message=FALSE, warning=FALSE}
+COAdata[1:2]
+
+```
+
+If you need to access COA estimates for a single indiviual you can access them by specifying which 'Tag.ID' you are looking for, for example if we want the COA estimates for individual `77523307`:
+
+```{r, eval=TRUE, message=FALSE, warning=FALSE}
+COAdata$`77523307`
+
+```
+<br>
+
+Once COA estimates are estimated we can calculate activity space metrics:
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+## Define projected Coordinate Reference System 
+# projected coordinate systems should signify distance in meters so the output area values are in sq meters
+# (here epsg:3577 refers to the GDA94 Australian Albers projection)
+library(raster)
+proj<-CRS("+init=epsg:3577")
+
+## HRSummary() requires calculation of COAs first
+## Estimate 100% Maximum Convex Polygon (MCP) areas
+mcp_est <- HRSummary(COAdata, 
+                     projCRS=proj, 
+                     type="MCP", 
+                     cont=100,
+                     sub = "%Y-%m")
+```
+
+
+`HRSummary()` outputs a list object with two components, `$Overall`: activity space metrics for the full period of the tag and `$Subsetted`: activity space metrics for weekly or monthly temporal subsets depending on the `sub` argument.
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+mcp_est
+
+```
+<br>
+
+Other types of activity space metrics can also be calculated (e.g. fixed KUD using `type = "fKUD"` and Brownian Bridge KUD using `type = "BBKUD"`. Cumulative activity space metrics across temporal subsets can also be calculated using the `cumulative = TRUE` argument. 
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+##*** Warning: the following might take a little while to run! ***##
+## Estimate 50% and 95% fixed Kernel Utilisation Distribution ('fKUD') contour areas with cumulative metrics calculated
+fkud_est<-HRSummary(COAdata, 
+                   projCRS=proj, 
+                   type="fKUD",
+                   cont=c(50,95),
+                   cumulative=TRUE)  
+```
+<br>
+
+## Storing spatial data associated with activity space metrics
+
+MCP polygons and probability distributions associated with fKUD and BBKUDs can be stored when `storepoly = TRUE`. This outputs a list object with the two components, `$Overall`: a tibble data frame with activity space metrics for the full period of the tag and `$Subsetted`: a tibble data frame with activity space metrics for weekly or monthly temporal subsets depending on the `sub` argument, but also includes an additional `$Spatial.Objects` list that stores polygons (if calculating MCPs) or probability distribution raster (if calculating fKUD or BBKUD) for full tag life and temporal subsets.
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+## Estimate 20%, 50% and 95% Brownian Bridge Kernel Utilisation Distribution ('BBKUD') contour areas and store polygons
+BBkud_est<-HRSummary(COAdata, 
+                   projCRS=proj, 
+                   type="BBKUD", 
+                   cont=c(20,50,95), 
+                   storepoly=TRUE)
+```
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+summary(BBkud_est)
+```
+<br>
+
+The `$Spatial.Objects` list object in itself consists of a nested list. The example object above, `BBkud_est` is structured in this way:
+
+```{r, eval=FALSE}
+`BBkud_est`
+    |---> `$Overall`    : tibble data frame with activity space metrics for full tag life
+    |---> `$Subsetted`  : tibble data frame with activity space metrics for each temporal subset
+    |---> `$Spatial.Objects` : list object with as many components as unique Tag.IDs in the data
+                |---> `51448633`
+                |---> `77523307`
+                          |----> `$BBKUD_full` : a raster object with the BBKUD for the full tag life
+                          |----> `$BBKUD_sub`  : a raster stack object with the BBKUD for each temporal subset
+                                      |-----> `$X2013.05` : raster object for subset '2013-05' (May 2013)
+                                      |-----> `$X2013.06` : raster object for subset '2013-06' (June 2013)
+                                      |-----> `$X2013.07` : raster object for subset '2013-07' (July 2013)
+```
+
+<br>
+
+## Map activity space
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+## Base plots using raster
+# Activity space for full tag life
+
+library(raster)
+library(viridis) ## access more color palettes!
+
+## Select rasters of full KUDs for each individual into a single list
+fullstack <-
+  unlist(BBkud_est$Spatial.Objects)[grep("*_full", names(unlist(BBkud_est$Spatial.Objects)))]
+
+names(fullstack) <-
+  unlist(lapply(strsplit(names(fullstack), "[.]"), `[[`, 1))
+
+## Lets plot the overall BBKUD for Tag.ID `77523307`
+fulltag <- fullstack$`77523307`
+values(fulltag)[values(fulltag) > 96] <- NA
+plot(fulltag, col = viridis(100), zlim = c(0, 100),
+     xlim=c(151.9, 152.1), ylim=c(-23.55, -23.4))
+points(station_latitude ~ station_longitude, statinfo, col = 2, cex=0.7)
+points(Latitude.coa ~ Longitude.coa,
+       data = COAdata$`77523307`,
+       pch = 20,
+       col = 4,
+       cex = 0.5)
+contour(fulltag, add = TRUE, levels = c(50, 95))
+```
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('images/Fig5.png')
+```
+
+<br>
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+# Monthly activity space for `77523307`
+## Select rasters of subsetted KUDs for each individual into a single list
+substack <-
+  unlist(BBkud_est$Spatial.Objects)[grep("*_sub", names(unlist(BBkud_est$Spatial.Objects)))]
+
+tag_subset <-
+  disaggregate(substack$`77523307.BBKUD_sub`,
+  fact = 3,
+  method = 'bilinear')
+  
+values(tag_subset)[values(tag_subset) > 96] <- NA
+names(tag_subset) <- 
+  format(ymd(paste0(substring(
+  names(tag_subset), 2
+  ), ".01")), "%B %Y")
+  
+tag.det<-
+  COAdata$`77523307` %>%
+  mutate(sub = format(TimeStep.coa, "%B.%Y"))
+
+coa.dat<-
+  ungroup(tag.det) %>%
+  dplyr::select(Longitude.coa,Latitude.coa,sub) %>%
+  split(.$sub)
+
+## Plot monthly KUD for tag `77523307`
+library(rasterVis)
+
+rasterVis::levelplot(tag_subset,
+          names.attr = sub("[.]", " ", names(tag_subset)),
+          xlim=c(151.85, 152.15), ylim=c(-23.55, -23.4),
+          par.settings=viridisTheme,
+          panel = function(..., at, contour = FALSE){
+            panel.levelplot(..., at = at, contour = contour)
+            panel.contourplot(..., at = c(50, 95), contour = TRUE, lty=1, col.regions="transparent")
+            panel.points(coa.dat[[panel.number()]],
+                         pch = 20,
+                         cex = 0.2,
+                         col = 4)
+            }
+          )
+
+```
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('images/Fig6.png')
+```
+
+<br>
+
+## Interactive maps with leaflet
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+library(leaflet)
+
+## Full KUD for all tagged animals
+fullmap <- leaflet() %>%
+  addProviderTiles(providers$Esri.WorldImagery)
+
+for (i in 1:length(fullstack)) {
+  tempras<-disaggregate(fullstack[[i]], fact=3, method='bilinear')
+  values(tempras)[values(tempras) >95] <-NA
+  fullmap <- 
+    fullmap %>% 
+    addRasterImage(tempras, opacity = 0.5, group = names(fullstack)[i])
+}
+
+coa.detections<-
+  do.call(rbind, COAdata) %>%
+  filter(Tag.ID %in% names(fullstack))
+
+fullmap <- 
+  fullmap %>%
+  addCircleMarkers(lng = coa.detections$Longitude.coa, lat = coa.detections$Latitude.coa,
+                   color = "red", radius = 1, weight=1, group = coa.detections$Tag.ID) %>%
+  addCircleMarkers(lng = statinfo$station_longitude, lat = statinfo$station_latitude,
+                   fill = F, color = "white", radius = 4, weight = 2, group = "Receiver Stations") %>%
+  addMeasure(position = "bottomleft",
+             primaryLengthUnit = "meters",
+             primaryAreaUnit = "sqmeters") %>%
+  addLayersControl(
+    baseGroups = coa.detections$Tag.ID,
+    overlayGroups = "Receiver Stations",
+    options = layersControlOptions(collapsed = FALSE)
+  )
+
+fullmap
+```
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('images/Fig7.png')
+```
+
+<br>
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+## Monthly KUD for tag `77523307`
+submap<- 
+  leaflet() %>%
+  addProviderTiles(providers$Esri.WorldImagery)
+
+for (i in 1:length(names(tag_subset))) {
+  submap <- 
+    submap %>% 
+    addRasterImage(tag_subset[[i]], opacity = 0.5, group = gsub("[.]", " ", names(tag_subset)[i]))
+} 
+
+submap<- 
+  submap %>%
+  addCircleMarkers(lng = tag.det$Longitude.coa, lat = tag.det$Latitude.coa,
+                   color = "red", radius = 1, weight=1, group = gsub("[.]", " ", tag.det$sub)) %>%
+  addCircleMarkers(lng = statinfo$station_longitude, lat = statinfo$station_latitude,
+                   fill = F, color = "white", radius = 4, weight=2, group = "Receiver Stations") %>%
+  addLayersControl(
+    baseGroups = gsub("[.]", " ", names(tag_subset)),
+    overlayGroups = "Receiver Stations",
+    options = layersControlOptions(collapsed = FALSE)
+  )
+
+submap
+
+```
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('images/Fig8.png')
+```
+
+<br>
+
+## Plotting and exploring monthly KUD values using `plotly`
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+## ------------------------------------
+## Monthly breakdown of KUDs
+## Summary plots of KUDs over time
+
+library(plotly)
+library(lubridate)
+## Interactive plotly
+datly<- 
+  BBkud_est$Subsetted %>%
+  filter(Tag.ID %in% names(fullstack)) %>%
+  mutate(Date = lubridate::ymd(paste0(subset,"-01")),
+         ActivitySpace_km2 = BBKUD.95/(10^6))
+
+p <- plot_ly(
+  type = 'scatter',
+  mode = "lines+markers",
+  x = filter(datly, Tag.ID %in% unique(datly$Tag.ID)[1])$Date,
+  y = filter(datly, Tag.ID %in% unique(datly$Tag.ID)[1])$ActivitySpace_km2,
+  name = unique(datly$Tag.ID)[1])
+
+for (id in unique(datly$Tag.ID)[-1]) {
+  p <- p %>% 
+    add_trace(x = filter(datly, Tag.ID %in% id)$Date,
+              y = filter(datly, Tag.ID %in% id)$ActivitySpace_km2,
+              name = id, mode="lines+markers", visible = FALSE)}
+
+p <- p %>%
+  layout(
+    title = "Monthly extent of activity Space",
+    xaxis = list(title = "Date"),
+    yaxis = list(title = "Extent of Activity Space (km2)", rangemode = "tozero"),
+    updatemenus = list(
+      list(
+        type="dropdown",
+        y = 1,
+        ## Add all buttons at once
+        buttons = lapply(unique(datly$Tag.ID), FUN=function(id) {
+          list(method="restyle", 
+               args = list("visible", unique(datly$Tag.ID) == id),
+               label = id)}))))
+p
+```
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('images/Fig9.png')
+```
+
+<br>
+
+***More functions to visualise standardised metrics coming soon!!***
+
+<br>
+<br>
+
+# Citation
+
+If you use these functions for publications the authors ask to please cite the use of the `VTrack` package using the following citation:
+
+**Campbell HA, Watts ME, Dwyer RG, Franklin CE (2012) V-Track: software for analysing and visualising animal movement from acoustic telemetry detections, Marine and Freshwater Research 63(9):815-820. doi: [10.1071/MF12194](http://www.dx.doi.org/10.1071/MF12194)**
+
+<br>
+
+The new Animal Tracking Toolbox operations can also be cited in publications using the following citation:
+
+**Udyawer V, Dwyer RG, Hoenner X, Babcock RC, Brodie S, Campbell HA, Harcourt RG, Huveneers C, Jaine FRA, Simpfendorfer CA, Taylor MD, Heupel MR (2018) A standardised framework for analysing animal detections from automated tracking arrays. Animal Biotelemetry 6(1):17. doi: [10.1186/s40317-018-0162-2](http://www.dx.doi.org/10.1186/s40317-018-0162-2)**
+
+<br>
+<br>
+
+# Authors
+
+Vinay Udyawer <br> <v.udyawer@aims.gov.au> <br> Australian Institute of Marine Science
+
+Ross Dwyer <br> <ross.dwyer@uq.edu.au> <br> University of Queensland
+
+Xavier Hoenner <br> <xavier.hoenner@utas.edu.au> <br> Australian Ocean Data Network
+
+<br>
+<br>
+
+**Vignette version**
+1.0.3 (19 Dec 2018)
