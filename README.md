@@ -1,4 +1,8 @@
 
+<br>
+<img src="vignettes/images/banner1.png"/>
+<br>
+
 # VTrack
 
 A package housing a collection of R Functions for the Analysis of Passive Acoustic Telemetry Data Collected by VEMCO Acoustic Tracking Equipment
@@ -6,7 +10,7 @@ A package housing a collection of R Functions for the Analysis of Passive Acoust
 The VTrack package was built to facilitate the assimilation, analysis and synthesis of animal location data collected by the VEMCO suite of acoustic transmitters and receivers. As well as database and visualisation capabilities, VTrack also provides functions to identify ecologically relevant events from tag detection and sensor data (e.g. residence, movements, diving, surfacing events). This procedure condenses the acoustic detection database by orders of magnitude, greatly enhancing the synthesis of acoustic detection data.
 
 <br>
-<img src="vignettes/images/banner1.png"/>
+<img src="vignettes/images/banner2.png"/>
 <br>
 
 # Installation and usage
@@ -27,18 +31,17 @@ devtools::install_github("rossdwyer/VTrack")
 A brief overview of VTrack functions and its use can be found [here](https://www.uq.edu.au/eco-lab/animal-tracking-workshop-notes).
 
 <br>
-<img src="vignettes/images/banner2.png"/>
+<img src="vignettes/images/banner3.png"/>
 <br>
 
 # New Features
 
 VTrack version >2.0.0 now hosts the Animal Tracking Toolbox (ATT). The ATT calculates standardised metrics of dispersal and activity space to enable direct comparisons between animals tracked within the same study and between studies or locations. The functions use tag detection data alongside tag metadata and receiver station information to calculate standardised movement and activity space metrics. 
 
-A brief user guide and walk through for the new ATT operation can be found [here](http://vinayudyawer.github.io/ATT/docs/ATT_Vignette.html).
+A brief user guide and walk through for the new ATT operations can be found [here](http://vinayudyawer.github.io/ATT/docs/ATT_Vignette.html).
 
 
 <br>
-<img src="vignettes/images/banner3.png"/>
 <br>
 
 # Citation
