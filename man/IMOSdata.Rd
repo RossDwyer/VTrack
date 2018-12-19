@@ -16,7 +16,7 @@ This dataset contains an example dataset containing 11 tagged Tiger sharks track
     \item{\code{file_id }}{a numeric vector containing a unique ID used for internal data management within the IMOS ATF database. Not required for the functioning of the ATT operations. }
     \item{\code{url }}{a character vector containing the url location for internal data management within the IMOS ATF database. Not required for the functioning of the ATT operations. }
     \item{\code{transmitter_id }}{a factor containing the combination of code map and ping ID for each transmitter deployed (e.g. A69-9002-12345). Note: Dual sensor tags are often associated with multiple transmitter IDs. Required field. }
-    \item{\code{tag_id }}{a factor unique ID for each tagged individual (e.g. 4462716). Note: This field unifies detections for animals tagged with dual sensor tags that have multiple transmitter_id codes. Required field. }
+    \item{\code{tag_id }}{a factors unique ID for each tagged individual (e.g. 4462716, "Tigger"). Note: This field unifies detections for animals tagged with dual sensor tags that have multiple transmitter_id codes. Required field. }
     \item{\code{release_id }}{a numeric vector containing a unique ID for animal releases used for internal data management within the IMOS ATF database. This field is used to differentiate transmitters that have been retrieved and reused across multiple animals. Not required for the functioning of the ATT operations. }
     \item{\code{tag_project_name }}{a factor containing the name of the project associated with each transmitter deployment. Not required for the functioning of the ATT operations. }
     \item{\code{common_name }}{the common name for the species being studied. \code{NA} suggests that no species name was supplied. Not required for the functioning of the ATT operations. }
@@ -55,14 +55,14 @@ This dataset contains an example dataset containing 11 tagged Tiger sharks track
   }
 }
 \details{
-The coordinates are given in decimal degrees WGS 84, time is UTC/GMT
+The coordinates are given in decimal degrees WGS 84, time is in UTC/GMT.
 }
 \source{
 \url{https://animaltracking.aodn.org.au}
 }
 
 \examples{
-#load the data and print the first few rows of the data frame
+## load the data and print the first few rows of the data frame
 data(IMOSdata)
 head(IMOSdata)
 }
