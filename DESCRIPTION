@@ -11,5 +11,9 @@ Imports: plotKML, sp, spacetime, doParallel, XML, intervals, gstat, Hmisc, check
 License: GPL (>= 2)
 URL: https://cran.r-project.org/web/packages/VTrack/index.html
 Encoding: latin1
-Suggests: testthat
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown
 RoxygenNote: 6.0.1
+VignetteBuilder: knitr
