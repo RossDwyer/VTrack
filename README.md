@@ -3,6 +3,13 @@
 
 # VTrack
 
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/VTrack)](https://cran.r-project.org/package=VTrack)
+[![CRAN_Downloads](http://cranlogs.r-pkg.org/badges/VTrack)](http://www.r-pkg.org/pkg/VTrack)
+[![CRAN_Downloads](http://cranlogs.r-pkg.org/badges/grand-total/VTrack)](http://r-pkg.org/pkg/VTrack)
+
+<br>
+
 A package housing a collection of R Functions for the Analysis of Passive Acoustic Telemetry Data Collected by VEMCO Acoustic Tracking Equipment
 
 The VTrack package was built to facilitate the assimilation, analysis and synthesis of animal location data collected by the VEMCO suite of acoustic transmitters and receivers. As well as database and visualisation capabilities, VTrack also provides functions to identify ecologically relevant events from tag detection and sensor data (e.g. residence, movements, diving, surfacing events). This procedure condenses the acoustic detection database by orders of magnitude, greatly enhancing the synthesis of acoustic detection data.
