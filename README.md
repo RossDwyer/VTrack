@@ -39,7 +39,7 @@ A brief overview of VTrack functions and its use can be found [here](https://www
 
 # New Features
 
-VTrack version >2.0.0 now hosts the Animal Tracking Toolbox (ATT). The ATT calculates standardised metrics of dispersal and activity space to enable direct comparisons between animals tracked within the same study and between studies or locations. The functions use tag detection data alongside tag metadata and receiver station information to calculate standardised movement and activity space metrics. 
+VTrack version >2 now hosts the Animal Tracking Toolbox (ATT). The ATT calculates standardised metrics of dispersal and activity space to enable direct comparisons between animals tracked within the same study and between studies or locations. The functions use tag detection data alongside tag metadata and receiver station information to calculate standardised movement and activity space metrics. 
 
 A brief user guide and walk through for the new ATT operations can be found [here](http://vinayudyawer.github.io/ATT/docs/ATT_Vignette.html).
 

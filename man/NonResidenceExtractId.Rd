@@ -57,25 +57,25 @@ T139 <- ExtractData(Vcrocs,
 # 	event = 2  
 # 	Min time period between detections before residence event
 # 	recorded = 43200 secs (12 hours)
-T139Res <- RunResidenceExtraction(sInputFile=T139, 
-                                 sLocation="RECEIVERID",
-                                 iResidenceThreshold=1,
-                                 iTimeThreshold=43200,
-                                 sDistanceMatrix=NULL)
+#T139Res <- RunResidenceExtraction(sInputFile=T139, 
+#                                 sLocation="RECEIVERID",
+#                                 iResidenceThreshold=1,
+#                                 iTimeThreshold=43200,
+#                                 sDistanceMatrix=NULL)
 
 # The residences event table
-T139resid <- T139Res$residences
+#T139resid <- T139Res$residences
 
 # Generate the circuitous distance matrix
-data(PointsCircuitous_crocs)
-CircuitousDM <- GenerateCircuitousDistance(PointsCircuitous_crocs)
+#data(PointsCircuitous_crocs)
+#CircuitousDM <- GenerateCircuitousDistance(PointsCircuitous_crocs)
 
 # Ensure there is only 1 Transmitter in dataset (if not, run the function within a loop)
-length(unique(T139resid$TRANSMITTERID))
+#length(unique(T139resid$TRANSMITTERID))
 
 # Run the non-residence function
-NonResidenceExtractId(sResidenceEventFile=T139resid,
-                      sDistanceMatrix=CircuitousDM)
+#NonResidenceExtractId(sResidenceEventFile=T139resid,
+#                      sDistanceMatrix=CircuitousDM)
 }
 
 \keyword{behaviour}

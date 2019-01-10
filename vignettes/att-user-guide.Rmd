@@ -1,7 +1,7 @@
 ---
 title: Animal Tracking Toolbox Quick Guide
 author: Vinay Udyawer, Ross Dwyer, Xavier Hoenner
-date: Dec 19, 2018
+date: Jan 10, 2019
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Animal Tracking Toolbox Quick Guide}

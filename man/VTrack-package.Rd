@@ -10,14 +10,14 @@ The \code{VTrack} package was built to facilitate the assimilation, analysis and
 
 https://cran.r-project.org/web/packages/VTrack/index.html
 
-'VTrack' version >2.0.0 now hosts the Animal Tracking Toolbox (ATT). The ATT calculates standardised metrics of dispersal and activity space to enable direct comparisons between animals tracked within the same study and between studies or locations. The functions use tag detection data alongside tag metadata and receiver station information to calculate standardised movement and activity space metrics. 
+'VTrack' version >2.00 now hosts the Animal Tracking Toolbox (ATT). The ATT calculates standardised metrics of dispersal and activity space to enable direct comparisons between animals tracked within the same study and between studies or locations. The functions use tag detection data alongside tag metadata and receiver station information to calculate standardised movement and activity space metrics. 
 
 }
 \details{
 \tabular{ll}{
 Package: \tab VTrack\cr
 Type: \tab Package\cr
-Version: \tab 2.0.0\cr
+Version: \tab 2.01\cr
 Date: \tab 2019-01-10\cr
 License: \tab GPL(>=2)\cr
 }
