@@ -9,7 +9,7 @@ Description: Designed to facilitate the assimilation, analysis and synthesis of 
 Depends: R (>= 3.3.0), foreach(>= 1.2.0)
 Imports: plotKML, sp, spacetime, doParallel, XML, intervals, gstat, Hmisc, checkmate, gdistance, raster, dplyr, ggplot2, lubridate, maptools, adehabitatHR,adehabitatLT   
 License: GPL (>= 2)
-URL: https://cran.r-project.org/web/packages/VTrack/index.html
+URL: https://CRAN.R-project.org/package=VTrack
 Encoding: latin1
 Suggests: 
     testthat,

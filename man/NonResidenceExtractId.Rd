@@ -48,18 +48,18 @@ Vcrocs <- ReadInputData(infile=crocs,
                         dateformat = NULL,
                         sVemcoFormat='1.0')       
 
-# Extract data for only the transmitter #138
-T138 <- ExtractData(Vcrocs, 
-                    sQueryTransmitterList = 138)
+# Extract data for only the transmitter #139
+T139 <- ExtractData(Vcrocs, 
+                    sQueryTransmitterList = 139)
 
 # Extract residence and non residence events using receiver data
 # 	Minimum number of detections to register as a residence
 # 	event = 2  
 # 	Min time period between detections before residence event
 # 	recorded = 43200 secs (12 hours)
-T139Res <- RunResidenceExtraction(sInputFile=T138, 
+T139Res <- RunResidenceExtraction(sInputFile=T139, 
                                  sLocation="RECEIVERID",
-                                 iResidenceThreshold=2,
+                                 iResidenceThreshold=1,
                                  iTimeThreshold=43200,
                                  sDistanceMatrix=NULL)
 

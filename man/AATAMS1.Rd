@@ -28,7 +28,7 @@ This AATAMS dataset contains the relocations of one animal monitored between 08 
 The coordinates are given in decimal degrees (WGS 84), time is GMT+10hrs. 
 }
 \source{
-\url{http://imos.org.au/home.html}
+\url{https://animaltracking.aodn.org.au}
 }
 
 \examples{

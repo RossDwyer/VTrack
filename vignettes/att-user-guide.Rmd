@@ -119,7 +119,7 @@ Analysing passive telemetry data requires three sets of data: Tag detection data
 | Receiver |	Name of acoustic receiver, combines receiver model with its serial number (e.g. VR2W-123456) | Yes |
 | Transmitter |	Combination of code map and ping ID (eg. A69-1303-14503) | Yes |
 | Sensor Value |	Physical measurement recorded by a tag’s sensor, if applicable (If sensor data hasn’t been converted then sensor_unit = ‘ADC’ and values range from 0 to 255.) | Yes |
-| Sensor Unit |	Physical unit associated with sensor values (Either ‘ADC’, ‘°C’, ‘m’ or ‘m/s2’) | Yes |
+| Sensor Unit |	Physical unit associated with sensor values (Either ‘ADC’, ‘degrees C’, ‘m’ or ‘m/s2’) | Yes |
 | Station Name |	Name of receiving station on which the transmitter was detected. Acoustic receivers typically gets deployed multiple times at the same station | Yes |
 | Latitude |	Latitude at which receiver was deployed and tag was detected (d.ddd˚) | Yes |
 | Longitude |	Longitude at which receiver was deployed and tag was detected (d.ddd˚) | Yes |
@@ -139,7 +139,7 @@ Analysing passive telemetry data requires three sets of data: Tag detection data
 | longitude |	Longitude at which receiver was deployed and tag was detected (d.ddd˚) | Yes |
 | latitude |	Latitude at which receiver was deployed and tag was detected (d.ddd˚) | Yes |
 | sensor_value |	Physical measurement recorded by a tag’s sensor, if applicable (If sensor data hasn’t been converted then sensor_unit = ‘ADC’ and values range from 0 to 255.) | Yes |
-| sensor_unit |	Physical unit associated with sensor values (Either ‘ADC’, ‘°C’, ‘m’ or ‘m/s2’) | Yes |
+| sensor_unit |	Physical unit associated with sensor values (Either ‘ADC’, ‘degrees C’, ‘m’ or ‘m/s2’) | Yes |
 | installation_name |	Name of installation on which the transmitter was detected. An installation typically consists of multiple receiving stations | No |
 | FDA_QC |	Quality control flag for the false detection algorithm (1:passed, 2:failed) | No |
 | Velocity_QC |	Velocity from previous and next detections both 10 m.s-1? (1:yes, 2:no) | No |
@@ -174,7 +174,7 @@ Tag metadata input format is based on IMOS ATF metadata structure
 | sensor_slope |	Slope used in the linear equation to convert raw sensor measurements | No |
 | sensor_intercept |	Intercept used in the linear equation to convert raw sensor measurements | No |
 | sensor_type |	Type of sensor (Can be pinger, temperature, pressure, or accelerometer) | No |
-| sensor_unit |	Physical unit associated with sensor values (Either ‘ADC’, ‘°C’, ‘m’ or ‘m/s2’) | No |
+| sensor_unit |	Physical unit associated with sensor values (Either ‘ADC’, ‘degrees C’, ‘m’ or ‘m/s2’) | No |
 | tag_model_name |	Tag model (e.g. V9, V13-TP, V16-P, V9-A) | No |
 | tag_serial_number |	Manufacturers serial number for deployed transmitter (e.g. 1126413) | No |
 | dual_sensor_tag |	Is the tag a dual sensor tag (TRUE/FALSE) | No |
@@ -193,8 +193,8 @@ Receiver metadata input format is based on IMOS ATF metadata structure
 | project_name | Project name under which the receiver was registered under | Yes |
 | deploymentdatetime_timestamp | Date and time at which receiver was deployed (yyyy-mm-dd HH:MM:SS) | Yes |
 | recoverydatetime_timestamp | Date and time at which receiver was recovered/removed (yyyy-mm-dd HH:MM:SS) | Yes |
-| station_latitude | Latitude at which receiver was deployed (d.ddd˚) | Yes |
-| station_longitude | Longitude at which receiver was deployed (d.ddd˚) | Yes |
+| station_latitude | Latitude at which receiver was deployed (d.ddd) | Yes |
+| station_longitude | Longitude at which receiver was deployed (d.ddd) | Yes |
 | status | Status of receiver (e.g. deployed, lost, damaged, recovered, etc) | Yes |
 
 <br>

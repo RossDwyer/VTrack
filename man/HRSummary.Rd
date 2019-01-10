@@ -62,7 +62,7 @@ ATTdata <- setupData(Tag.Detections = IMOSdata,
                      Station.Information = statinfo, 
                      source = "IMOS")
 
-## Estimate Short-term center of activities
+## Estimate short-term center of activities
 COAdata <- COA(ATTdata)
 
 ## Define coordinate system for projection of detection data (in m)
@@ -72,10 +72,10 @@ proj <- CRS("+init=epsg:3577")
 mcp_est <- HRSummary(COAdata, projCRS=proj, type="MCP", cont=100)
 
 ## Estimate 50\% and 95\% fKUD areas with cumulative metrics calculated
-kud_est <- HRSummary(COAdata, 
-                    projCRS=proj,
-                    type="fKUD", 
-                    cumulative=TRUE)
+#kud_est <- HRSummary(COAdata, 
+#                    projCRS=proj,
+#                    type="fKUD", 
+#                    cumulative=TRUE)
 
 ## Estimate 20\%, 50\% and 95\% BBKUD contour areas and store polygons
 #kud_est <- HRSummary(COAdata, 
