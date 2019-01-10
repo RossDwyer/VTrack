@@ -8,7 +8,7 @@
 #' @param Station.Information data frame with information on receiver station including coordinates. Currently only handles IMOS ATF station information structure.
 #' @param source character indicating source of Tag.Detection data. "IMOS" for data downloaded from IMOS data repository
 #'  and "VEMCO" for data exported from the VEMCO VUE database
-#' @param tz time zone of date time information in Tag.Detections, Tag.Metadata and Station.Information. If none provided defaults to "UTC"
+#' @param tzone time zone of date time information in Tag.Detections, Tag.Metadata and Station.Information. If none provided defaults to "UTC"
 #' @param crs geographic coordinate system for all Tag.Detections, Tag.Metadata and Station.Information (latitude/longitude). If none provided defaults to WGS84.
 #'
 #' @return Produces an 'ATT' object that is a list of tibbles containing Tag.Detections, Tag.Metadata and Station.Information.
@@ -37,7 +37,7 @@
 #' ATTdata
 #'
 #'
-setupData<-function(Tag.Detections, Tag.Metadata, Station.Information, source=NULL, tz="UTC", crs=NULL){
+setupData<-function(Tag.Detections, Tag.Metadata, Station.Information, source=NULL, tzone="UTC", crs=NULL){
 
    detection_timestamp <- transmitter_id <- station_name <-receiver_name <-latitude <-longitude <- NULL
    sensor_value <-sensor_unit <-Date.and.Time..UTC. <-Transmitter <-Station.Name <-Receiver <-Latitude <- NULL
@@ -51,7 +51,7 @@ setupData<-function(Tag.Detections, Tag.Metadata, Station.Information, source=NU
 
   if(source %in% "IMOS"){
     Tag.Detections = as_tibble(Tag.Detections) %>%
-      transmute(Date.Time = lubridate::ymd_hms(detection_timestamp, tz=tz),
+      transmute(Date.Time = lubridate::ymd_hms(detection_timestamp, tz=tzone),
                 Transmitter = transmitter_id,
                 Station.Name = station_name,
                 Receiver = receiver_name,
@@ -61,7 +61,7 @@ setupData<-function(Tag.Detections, Tag.Metadata, Station.Information, source=NU
                 Sensor.Unit = sensor_unit)}
   if(source %in% "VEMCO"){
     Tag.Detections = as_tibble(Tag.Detections) %>%
-      transmute(Date.Time = lubridate::ymd_hms(Date.and.Time..UTC., tz=tz),
+      transmute(Date.Time = lubridate::ymd_hms(Date.and.Time..UTC., tz=tzone),
                 Transmitter = Transmitter,
                 Station.Name = Station.Name,
                 Receiver = Receiver,
@@ -70,6 +70,8 @@ setupData<-function(Tag.Detections, Tag.Metadata, Station.Information, source=NU
                 Sensor.Value = Sensor.Value,
                 Sensor.Unit = Sensor.Unit)}
 
+   #print(Tag.Detections)
+   
   object<-
     structure(
       list(
@@ -82,7 +84,7 @@ setupData<-function(Tag.Detections, Tag.Metadata, Station.Information, source=NU
                     Tag.Project = tag_project_name,
                     Release.Latitude = release_latitude,
                     Release.Longitude = release_longitude,
-                    Release.Date = lubridate::as_date(ReleaseDate, tz=tz),
+                    Release.Date = as.Date(ReleaseDate),
                     Tag.Life = tag_expected_life_time_days,
                     Tag.Status = tag_status,
                     Sex = sex,
@@ -93,8 +95,8 @@ setupData<-function(Tag.Detections, Tag.Metadata, Station.Information, source=NU
                     Receiver = receiver_name,
                     Installation = installation_name,
                     Receiver.Project = project_name,
-                    Deployment.Date = lubridate::as_date(deploymentdatetime_timestamp, tz=tz),
-                    Recovery.Date = lubridate::as_date(recoverydatetime_timestamp, tz=tz),
+                    Deployment.Date = as.Date(deploymentdatetime_timestamp),
+                    Recovery.Date = as.Date(recoverydatetime_timestamp),                    
                     Station.Latitude = station_latitude,
                     Station.Longitude = station_longitude,
                     Receiver.Status = status)),
@@ -102,10 +104,10 @@ setupData<-function(Tag.Detections, Tag.Metadata, Station.Information, source=NU
       class="ATT")
 
   if(inherits(crs, "CRS")){
-    attr(object, "CRS")<-crs
+    attr(object, "CRS")<- crs
     }else{
       message("Geographic projection for detection positions not recognised, reverting to WGS84 global coordinate reference system")
-      attr(object, "CRS")<-CRS("+init=epsg:4326")
+      attr(object, "CRS") <- sp::CRS("+init=epsg:4326")
     }
 
   return(object)

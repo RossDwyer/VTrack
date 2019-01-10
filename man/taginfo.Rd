@@ -25,7 +25,7 @@ This dataset contains an example of tag metadata required for the functioning of
     \item{\code{sensor_slope }}{a numeric vector containing the slope used in the linear equation to convert raw sensor measurements. This value is provided by transmitter manufacturer. } 
     \item{\code{sensor_intercept }}{a numeric vector containing the intercept used in the linear equation to convert raw sensor measurements. This value is provided by transmitter manufacturer. } 
     \item{\code{sensor_type }}{a character vector indicating type of sensor (Can be: pinger, temperature, pressure, or accelerometer). } 
-    \item{\code{tag_sensor_unit }}{a character vector conatining the units pertaining to the sensor value (e.g. m, ms-2, degrees celcius). }
+    \item{\code{sensor_unit }}{a character vector conatining the units pertaining to the sensor value (e.g. m, ms-2, degrees celcius). }
     \item{\code{tag_model_name }}{a character vector indicating tag model (e.g. V9, V13-TP, V16-P, V9-A). }   
     \item{\code{tag_serial_number }}{a numeric vector containing manufacturers serial number for deployed transmitter (e.g. 1083971). }   
     \item{\code{tag_expected_life_time_days }}{a numeric vector containing the expected life time of the transmitter (days). This estimated battery life is provided by transmitter manufacturer. }  

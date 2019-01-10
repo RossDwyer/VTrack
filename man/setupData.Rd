@@ -4,7 +4,7 @@
 \alias{setupData}
 \title{Setup data prior to use with Animal Tracking Toolbox functions}
 \usage{
-setupData(Tag.Detections, Tag.Metadata, Station.Information, source = NULL, tz = "UTC",
+setupData(Tag.Detections, Tag.Metadata, Station.Information, source = NULL, tzone = "UTC",
   crs = NULL)
 }
 \arguments{
@@ -16,7 +16,7 @@ setupData(Tag.Detections, Tag.Metadata, Station.Information, source = NULL, tz =
 
 \item{source}{source character indicating source of Tag.Detection data. "IMOS" for data downloaded from IMOS data repository and "VEMCO" for data exported from the VEMCO VUE database}
 
-\item{tz}{time zone of date time information in Tag.Detections, Tag.Metadata and Station.Information. If none provided defaults to "UTC"}
+\item{tzone}{time zone of date time information in Tag.Detections, Tag.Metadata and Station.Information. If none provided defaults to "UTC"}
 
 \item{crs}{geographic coordinate system for all Tag.Detections, Tag.Metadata and Station.Information (latitude/longitude). If none provided defaults to WGS84.}
 }

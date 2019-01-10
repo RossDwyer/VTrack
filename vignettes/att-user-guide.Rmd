@@ -201,13 +201,12 @@ Receiver metadata input format is based on IMOS ATF metadata structure
 
 # Usage
 
-## Load the VTrack library
-```{r, eval=FALSE, message=FALSE}
+## Load the VTrack version >2.0 library
+```{r, eval=TRUE, message=FALSE}
 library(VTrack)
+#library(sp)
 ```
-```{r, eval=TRUE, message=FALSE, include=FALSE}
-library(ATT)
-```
+
 
 ## Setup data for smooth functioning with other ATT functions
 ```{r, eval=TRUE, message=FALSE, warning=FALSE}
@@ -218,10 +217,11 @@ data(taginfo)
 data(statinfo)
 
 ## Setup data for use with the Animal Tracking Toolbox
-ATTdata<- setupData(Tag.Detections = IMOSdata, 
-                    Tag.Metadata = taginfo, 
-                    Station.Information = statinfo, 
-                    source="IMOS")
+ATTdata <- setupData(Tag.Detections = IMOSdata, 
+                     Tag.Metadata = taginfo, 
+                     Station.Information = statinfo, 
+                     source="IMOS",
+                     tzone= "UTC")
 ```
 
 

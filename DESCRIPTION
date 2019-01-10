@@ -2,7 +2,7 @@ Package: VTrack
 Type: Package
 Title: A Collection of Tools for the Analysis of Passive Acoustic Telemetry Data
 Version: 2.0.0
-Date: 2018-11-28
+Date: 2019-01-10
 Author: Ross G. Dwyer, Vinay Udyawer, Mathew E. Watts, Craig E. Franklin & Hamish A. Campbell
 Maintainer: Ross Dwyer <ross.dwyer@uq.edu.au>
 Description: Designed to facilitate the assimilation, analysis and synthesis of animal location and movement data collected by the VEMCO suite of acoustic transmitters and receivers. As well as database and geographic information capabilities the principal feature of VTrack is the qualification and identification of ecologically relevant events from the acoustic detection and sensor data. This procedure condenses the acoustic detection database by orders of magnitude, greatly enhancing the synthesis of acoustic detection data.

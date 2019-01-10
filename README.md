@@ -12,7 +12,7 @@
 
 A package housing a collection of R Functions for the Analysis of Passive Acoustic Telemetry Data Collected by VEMCO Acoustic Tracking Equipment
 
-The VTrack package was built to facilitate the assimilation, analysis and synthesis of animal location data collected by the VEMCO suite of acoustic transmitters and receivers. As well as database and visualisation capabilities, VTrack also provides functions to identify ecologically relevant events from tag detection and sensor data (e.g. residence, movements, diving, surfacing events). This procedure condenses the acoustic detection database by orders of magnitude, greatly enhancing the synthesis of acoustic detection data.
+The 'VTrack' package was built to facilitate the assimilation, analysis and synthesis of animal location data collected by the VEMCO suite of acoustic transmitters and receivers. As well as database and visualisation capabilities, 'VTrack' also provides functions to identify ecologically relevant events from tag detection and sensor data (e.g. residence, movements, diving, surfacing events). This procedure condenses the acoustic detection database by orders of magnitude, greatly enhancing the synthesis of acoustic detection data.
 
 <br>
 <img src="vignettes/images/banner2.png"/>
