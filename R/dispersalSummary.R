@@ -126,7 +126,7 @@ dispersalSummary<-function(ATTdata){
           )
         disp$Time.Since.Last.Detection <-
           c(NA, sapply(2:nrow(disp), function(x)
-            difftime(disp$Date.Time[x], disp$Date.Time[x - 1], "secs")))
+            difftime(disp$Date.Time[x], disp$Date.Time[x - 1], units = "secs")))
       }
       else{
         pts<-data.frame(lat=dat$Latitude, lon=dat$Longitude)
