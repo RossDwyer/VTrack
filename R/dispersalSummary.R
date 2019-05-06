@@ -149,7 +149,7 @@ dispersalSummary<-function(ATTdata){
                                                   gzAzimuth(from=matrix(c(disp$Longitude[x-1],disp$Latitude[x-1]),1,2),
                                                             to=matrix(c(disp$Longitude[x],disp$Latitude[x]),1,2))))
         disp$Consecutive.Bearing<- ifelse(!is.na(disp$Consecutive.Bearing) & disp$Consecutive.Bearing<0, disp$Consecutive.Bearing+360, disp$Consecutive.Bearing)
-        disp$Time.Since.Last.Detection<-c(NA, sapply(2:nrow(disp), function(x) difftime(disp$Date.Time[x], disp$Date.Time[x-1], "secs")))
+        disp$Time.Since.Last.Detection<-c(NA, sapply(2:nrow(disp), function(x) difftime(disp$Date.Time[x], disp$Date.Time[x-1], units = "secs")))
       }
     }
     else{
