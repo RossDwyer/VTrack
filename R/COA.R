@@ -77,7 +77,7 @@ COA<-function (ATTdata, timestep=60, split=FALSE){
     attr(cenac, "class")<-c("list","COA", "ATT")
     attr(cenac, "CRS")<-attr(ATTdata, "CRS")
   }else{
-    attr(cenac, "class")<-c("grouped_df","tbl_df","tbl","data.frame","COA", "ATT")
+    attr(cenac, "class")<-c("grouped_df","COA","ATT","tbl_df","tbl","data.frame")
     attr(cenac, "CRS")<-attr(ATTdata, "CRS")
   }
   return(cenac)
