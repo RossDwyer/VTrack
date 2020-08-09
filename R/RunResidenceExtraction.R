@@ -1,3 +1,5 @@
+#' @importFrom foreach foreach
+
 RunResidenceExtraction <-
 function(sInputFile,sLocation,iResidenceThreshold,iTimeThreshold,sDistanceMatrix=NULL,iCores=2)
 {

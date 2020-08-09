@@ -4,7 +4,7 @@
 \alias{detectionSummary}
 \title{Calculate standard metrics of detection using passive telemetry data}
 \usage{
-detectionSummary(ATTdata, sub = "\%Y-\%m")
+detectionSummary(ATTdata, sub = "\%Y-\%m", download_date = NULL)
 }
 \arguments{
 \item{ATTdata}{an 'ATT' object created using \code{\link{setupData}} containing
@@ -12,6 +12,9 @@ tag detection data, metadata and station information}
 
 \item{sub}{argument to define temporal subsets. Temporal subsets are currently restricted to monthly ('\%Y-\%m') or weekly ('\%Y-\%W').
 Defaults to monthly if none is provided.}
+
+\item{download_date}{date the array was downloaded in the form 'yyyy-mm-dd' for calculating detection summary before the collection of full
+dataset has been collected. If none provided, it is assumed complete data has been collected, and detection indices are calculated as such.}
 }
 \value{
 Produces a list of tibbles containing Overall (full tag life) and Subsetted (user-defined temporal subsets) metrics of detection.
@@ -28,19 +31,28 @@ data(taginfo)
 data(statinfo)
 
 ## Setup data
-ATTdata <- setupData(Tag.Detections = IMOSdata,
-                     Tag.Metadata = taginfo, 
-                     Station.Information = statinfo, 
-                     source="IMOS")
+ATTdata<- setupData(Tag.Detections = IMOSdata, 
+                    Tag.Metadata = taginfo, 
+                    Station.Information = statinfo, 
+                    source = "IMOS")
 
 ## Estimate detecion metrics with monthly subsets chosen
-#dSum <- detectionSummary(ATTdata, sub = "%Y-%m")
+dSum<-detectionSummary(ATTdata, sub = "\%Y-\%m")
 
 ## Metrics of detection for full tag life
-#dSum$Overall
+dSum$Overall
 
 ## Metrics of detection for each temporal subset
-#dSum$Subsetted
+dSum$Subsetted
+
+## If the full dataset hasn't been collected yet, detection indicies
+## can be calculated to the most recent date when the acoustic array
+## was downloaded. Indicate latest download date in the format 'yyyy-mm-dd'
+dSum_partial <- detectionSummary(ATTdata, download_date = "2014-01-01")
+
+dSum_partial$Overall
+
+dSum_partial$Subsetted
 
 }
 \seealso{

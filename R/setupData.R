@@ -8,7 +8,7 @@
 #' @param Station.Information data frame with information on receiver station including coordinates. Currently only handles IMOS ATF station information structure.
 #' @param source character indicating source of Tag.Detection data. "IMOS" for data downloaded from IMOS data repository
 #'  and "VEMCO" for data exported from the VEMCO VUE database
-#' @param tz time zone of date time information in Tag.Detections, Tag.Metadata and Station.Information. If none provided defaults to "UTC"
+#' @param tzone time zone of date time information in Tag.Detections, Tag.Metadata and Station.Information. If none provided defaults to "UTC"
 #' @param crs geographic coordinate system for all Tag.Detections, Tag.Metadata and Station.Information (latitude/longitude). If none provided defaults to WGS84.
 #'
 #' @return Produces an 'ATT' object that is a list of tibbles containing Tag.Detections, Tag.Metadata and Station.Information.
@@ -33,7 +33,11 @@
 #' data(statinfo)
 #'
 #' ## Setup data
-#' ATTdata<- setupData(Tag.Detections = IMOSdata, Tag.Metadata = taginfo, Station.Information = statinfo, source = "IMOS")
+#' ATTdata<- setupData(Tag.Detections = IMOSdata, 
+#'                     Tag.Metadata = taginfo, 
+#'                     Station.Information = statinfo, 
+#'                     source = "IMOS")
+#'
 #' ATTdata
 #'
 #'

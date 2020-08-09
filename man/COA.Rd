@@ -31,17 +31,16 @@ data(taginfo)
 data(statinfo)
 
 ## Setup data
-ATTdata <- setupData(Tag.Detections = IMOSdata, 
-                     Tag.Metadata = taginfo, 
-                     Station.Information = statinfo, 
-                     source="IMOS")
+ATTdata<- setupData(Tag.Detections = IMOSdata, 
+                    Tag.Metadata = taginfo, 
+                    Station.Information = statinfo, 
+                    source="IMOS")
 
 ## Estimate Short-term Center of Activities for all individuals
 COAdata<- COA(ATTdata)
-head(COAdata)
+
 
 }
 \seealso{
 Input data needs to be setup using \code{\link{setupData}}. 'COA' object required for \code{\link{HRSummary}}
 }
-                                                                                 

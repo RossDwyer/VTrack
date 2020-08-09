@@ -4,12 +4,23 @@
 \alias{HRprocess}
 \title{Preprocess activity space function}
 \usage{
-HRprocess(cenac, utm, ll, type = "MCP", h = 200, ext = 2, grid = 200,
-  sub = "\%Y-\%m", cont = c(50, 95), cumulative = FALSE,
-  storepoly = FALSE, div = 4)
+HRprocess(
+  cenac,
+  utm,
+  ll,
+  type = "MCP",
+  h = 200,
+  ext = 2,
+  grid = 200,
+  sub = "\%Y-\%m",
+  cont = c(50, 95),
+  cumulative = FALSE,
+  storepoly = FALSE,
+  div = 4
+)
 }
 \arguments{
-\item{cenac}{centre of activity file}
+\item{cenac}{center of activity positions generated from \code{\link{COA}}, and used here to pre-process before feeding back to \code{\link{HRSummary}}}
 
 \item{utm}{a projected coordinate reference system in meters used to accurately estimate area (see \code{\link{CRS}})}
 
@@ -36,7 +47,6 @@ this may take a long time depending on size of dataset.}
 \item{storepoly}{TRUE/FALSE, should activity space metrics be saved as spatial objects (polygons or rasters)}
 
 \item{div}{sig1 divisor used to correct BBKUD estimates.}
-
 }
 \value{
 Produces a list of 2 tibbles containing Overall (full tag life) and Subsetted (user-defined temporal subsets) metrics of activity space.

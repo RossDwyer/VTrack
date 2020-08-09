@@ -30,7 +30,10 @@
 #' data(statinfo)
 #'
 #' ## Setup data
-#' ATTdata<- setupData(Tag.Detections = IMOSdata, Tag.Metadata = taginfo, Station.Information = statinfo, source = "IMOS")
+#' ATTdata<- setupData(Tag.Detections = IMOSdata, 
+#'                     Tag.Metadata = taginfo, 
+#'                     Station.Information = statinfo, 
+#'                     source = "IMOS")
 #'
 #' ## Create abacus plot
 #' abacusPlot(ATTdata)

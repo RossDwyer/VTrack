@@ -26,7 +26,10 @@
 #' data(statinfo)
 #'
 #' ## Setup data
-#' ATTdata<- setupData(Tag.Detections = IMOSdata, Tag.Metadata = taginfo, Station.Information = statinfo, source="IMOS")
+#' ATTdata<- setupData(Tag.Detections = IMOSdata, 
+#'                     Tag.Metadata = taginfo, 
+#'                     Station.Information = statinfo, 
+#'                     source = "IMOS")
 #'
 #' ## Estimate detecion metrics with monthly subsets chosen
 #' dSum<-detectionSummary(ATTdata, sub = "%Y-%m")
@@ -37,10 +40,19 @@
 #' ## Metrics of detection for each temporal subset
 #' dSum$Subsetted
 #'
+#' ## If the full dataset hasn't been collected yet, detection indicies
+#' ## can be calculated to the most recent date when the acoustic array
+#' ## was downloaded. Indicate latest download date in the format 'yyyy-mm-dd'
+#' dSum_partial <- detectionSummary(ATTdata, download_date = "2014-01-01")
+#' 
+#' dSum_partial$Overall
+#' 
+#' dSum_partial$Subsetted
+#' 
 detectionSummary <- function(ATTdata, sub = '%Y-%m', download_date = NULL){
 
   Date.Time <-Tag.ID <-Transmitter <-Sci.Name <-Sex <-Bio <-Station.Name <-Release.Date <-Tag.Life <- Days.Detected <- NULL
-  uniqueStations <- Days.at.Liberty <- NULL
+  uniqueStations <- Days.at.Liberty <- start_date <- end_date <- NULL
     
   if(!inherits(ATTdata, "ATT"))
     stop("Oops! Input data needs to be an 'ATT' object.\nSet up your data first using setupData() before running this operation")

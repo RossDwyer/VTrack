@@ -26,7 +26,10 @@
 #' data(statinfo)
 #'
 #' ## Setup data
-#' ATTdata<- setupData(Tag.Detections = tagdata, Tag.Metadata = taginfo, Station.Information = statinfo, source="IMOS")
+#' ATTdata<- setupData(Tag.Detections = IMOSdata, 
+#'                     Tag.Metadata = taginfo, 
+#'                     Station.Information = statinfo, 
+#'                     source="IMOS")
 #'
 #' ## Estimate Short-term Center of Activities for all individuals
 #' COAdata<- COA(ATTdata)

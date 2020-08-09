@@ -4,9 +4,19 @@
 \alias{HRSummary}
 \title{Calculate metrics of activity space using passive telemetry data}
 \usage{
-HRSummary(COAdata, projCRS, type = "MCP", cont = c(50, 95),
-  sub = "\%Y-\%m", cumulative = FALSE, storepoly = FALSE, h = 500,
-  ext = 2, grid = 200, div = 4)
+HRSummary(
+  COAdata,
+  projCRS,
+  type = "MCP",
+  cont = c(50, 95),
+  sub = "\%Y-\%m",
+  cumulative = FALSE,
+  storepoly = FALSE,
+  h = 500,
+  ext = 2,
+  grid = 200,
+  div = 4
+)
 }
 \arguments{
 \item{COAdata}{a 'COA' object with estimated center of activity positions (using \code{\link{COA}})}
@@ -48,41 +58,41 @@ Produce standard metrics of activity space. Metrics can include Minimum convex p
  activity spaces can also be estimated at set temporal subsets.
 }
 \examples{
-
-require(sp)
-
 ## Import example datasets
 data(IMOSdata)
 data(taginfo)
 data(statinfo)
 
 ## Setup data
-ATTdata <- setupData(Tag.Detections = IMOSdata,
-                     Tag.Metadata = taginfo, 
-                     Station.Information = statinfo, 
-                     source = "IMOS")
+ATTdata<- setupData(Tag.Detections = IMOSdata, 
+                    Tag.Metadata = taginfo, 
+                    Station.Information = statinfo, 
+                    source="IMOS")
 
-## Estimate short-term center of activities
-COAdata <- COA(ATTdata)
+## Estimate Short-term center of activities
+COAdata<-COA(ATTdata)
 
 ## Define coordinate system for projection of detection data (in m)
-proj <- CRS("+init=epsg:3577")
+proj<-sp::CRS("+init=epsg:3577")
 
 ## Estimate 100\% MCP areas
-mcp_est <- HRSummary(COAdata, projCRS=proj, type="MCP", cont=100)
+mcp_est<-HRSummary(COAdata,
+                   projCRS=proj, 
+                   type="MCP", 
+                   cont=100)
 
 ## Estimate 50\% and 95\% fKUD areas with cumulative metrics calculated
-#kud_est <- HRSummary(COAdata, 
-#                    projCRS=proj,
-#                    type="fKUD", 
-#                    cumulative=TRUE)
+kud_est<-HRSummary(COAdata, 
+                   projCRS=proj, 
+                   type="fKUD", 
+                   cumulative=TRUE)
 
 ## Estimate 20\%, 50\% and 95\% BBKUD contour areas and store polygons
-#kud_est <- HRSummary(COAdata, 
-#                     projCRS=proj, 
-#                     type="BBKUD", 
-#                     cont=c(20,50,95), 
-#                     storepoly=TRUE)
+kud_est<-HRSummary(COAdata, 
+                   projCRS=proj, 
+                   type="BBKUD", 
+                   cont=c(20,50,95), 
+                   storepoly=TRUE)
 
 
 }

@@ -2,7 +2,7 @@
 #'
 #'@description Internal function to run \code{\link{HRSummary}}.
 #'
-#' @param COAdata a 'COA' object with estimated center of activity positions (using \code{\link{COA}})
+#' @param cenac center of activity positions generated from \code{\link{COA}}, and used here to pre-process before feeding back to \code{\link{HRSummary}}
 #' @param utm a projected coordinate reference system in meters used to accurately estimate area (see \code{\link{CRS}})
 #' @param ll a geographic coordinate reference system in meters used to accurately estimate area (see \code{\link{CRS}})
 #' @param type type of activity space metric to calculate. Currently "MCP" for minimum convex polygons,

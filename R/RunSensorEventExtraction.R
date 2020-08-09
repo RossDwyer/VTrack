@@ -1,3 +1,5 @@
+#' @importFrom foreach foreach
+
 RunSensorEventExtraction <- function(sInputFile,
                                      iEventType,            
                                      sLocation,               

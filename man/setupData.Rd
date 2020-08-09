@@ -4,8 +4,14 @@
 \alias{setupData}
 \title{Setup data prior to use with Animal Tracking Toolbox functions}
 \usage{
-setupData(Tag.Detections, Tag.Metadata, Station.Information, source = NULL, tzone = "UTC",
-  crs = NULL)
+setupData(
+  Tag.Detections,
+  Tag.Metadata,
+  Station.Information,
+  source = NULL,
+  tzone = "UTC",
+  crs = NULL
+)
 }
 \arguments{
 \item{Tag.Detections}{data frame with tag detection data including coordinates. Currently only handles IMOS ATF data structure.}
@@ -14,7 +20,8 @@ setupData(Tag.Detections, Tag.Metadata, Station.Information, source = NULL, tzon
 
 \item{Station.Information}{data frame with information on receiver station including coordinates. Currently only handles IMOS ATF station information structure.}
 
-\item{source}{source character indicating source of Tag.Detection data. "IMOS" for data downloaded from IMOS data repository and "VEMCO" for data exported from the VEMCO VUE database}
+\item{source}{character indicating source of Tag.Detection data. "IMOS" for data downloaded from IMOS data repository
+and "VEMCO" for data exported from the VEMCO VUE database}
 
 \item{tzone}{time zone of date time information in Tag.Detections, Tag.Metadata and Station.Information. If none provided defaults to "UTC"}
 
@@ -26,28 +33,22 @@ Produces an 'ATT' object that is a list of tibbles containing Tag.Detections, Ta
 }
 \description{
 Sets up and stores all relevant information required for spatio-temporal analyses of passive telemetry data from IMOS and VEMCO databases.
-This function produces an 'ATT' object which standardises field names (currently handles IMOS ATF export data structure).
+ This function produces an 'ATT' object which standardises field names (currently handles IMOS ATF export data structure).
 }
 \examples{
 ## Import example datasets
 data(IMOSdata)
-data(VEMCOdata)
 data(taginfo)
 data(statinfo)
 
-## Setup data from IMOS ATF data repository
-ATTdata <- setupData(Tag.Detections = IMOSdata,
-                     Tag.Metadata = taginfo, 
-                     Station.Information = statinfo, 
-                     source = "IMOS")
-head(ATTdata)
+## Setup data
+ATTdata<- setupData(Tag.Detections = IMOSdata, 
+                    Tag.Metadata = taginfo, 
+                    Station.Information = statinfo, 
+                    source = "IMOS")
 
-## Setup data from VEMCO VUE database
-ATTdata <- setupData(Tag.Detections = VEMCOdata, 
-                     Tag.Metadata = taginfo, 
-                     Station.Information = statinfo, 
-                     source = "VEMCO")
-head(ATTdata)
+ATTdata
+
 
 }
 \seealso{

@@ -30,7 +30,10 @@
 #' data(statinfo)
 #'
 #' ## Setup data
-#' ATTdata<- setupData(Tag.Detections = IMOSdata, Tag.Metadata = taginfo, Station.Information = statinfo, source = "IMOS")
+#' ATTdata<- setupData(Tag.Detections = IMOSdata, 
+#'                     Tag.Metadata = taginfo, 
+#'                     Station.Information = statinfo, 
+#'                     source = "IMOS")
 #'
 #' ## Estimate detecion metrics with monthly subsets chosen
 #' dispSum<-dispersalSummary(ATTdata)

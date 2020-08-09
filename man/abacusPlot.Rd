@@ -4,9 +4,18 @@
 \alias{abacusPlot}
 \title{Plot daily detections over time (or across recievers)}
 \usage{
-abacusPlot(ATTdata, id = NULL, theme = "theme_linedraw", xlab = NULL,
-  ylab = NULL, det.col = 2, tag.col = 8, facet = FALSE,
-  new.window = TRUE, ...)
+abacusPlot(
+  ATTdata,
+  id = NULL,
+  theme = "theme_linedraw",
+  xlab = NULL,
+  ylab = NULL,
+  det.col = 2,
+  tag.col = 8,
+  facet = FALSE,
+  new.window = FALSE,
+  ...
+)
 }
 \arguments{
 \item{ATTdata}{input 'ATT' object containing tag detection, metadata and station information.}
@@ -25,7 +34,7 @@ abacusPlot(ATTdata, id = NULL, theme = "theme_linedraw", xlab = NULL,
 
 \item{facet}{conditional argument to plot faceted plot, plotting detections by each animal on receiver stations (default = FALSE)}
 
-\item{new.window}{conditional argument for plotting in a new window (default = TRUE)}
+\item{new.window}{conditional argument for plotting in a new window (default = FALSE)}
 
 \item{...}{other arguments sent to geom_points to modify plotting aesthetics}
 }
@@ -47,7 +56,7 @@ data(statinfo)
 ATTdata<- setupData(Tag.Detections = IMOSdata, 
                     Tag.Metadata = taginfo, 
                     Station.Information = statinfo, 
-                    source="IMOS")
+                    source = "IMOS")
 
 ## Create abacus plot
 abacusPlot(ATTdata)
