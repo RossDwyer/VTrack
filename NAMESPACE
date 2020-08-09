@@ -1,5 +1,4 @@
 # Import all packages listed as Imports or Depends
-import(foreach)
 import(adehabitatHR)
 import(ggplot2)
 import(maptools)
@@ -7,6 +6,7 @@ import(XML)
 import(intervals)
 import(gstat)
 import(checkmate)
+importFrom(foreach, foreach)
 importFrom(adehabitatLT,as.ltraj)
 importFrom(dplyr,left_join,mutate,group_by,ungroup,summarize,summarise,select,transmute,do,'%>%',n,n_distinct,first,filter,as_tibble,group_size)
 importFrom(sp,SpatialPoints,proj4string,coordinates,CRS,spDists,spDistsN1,SpatialLinesLengths,gridded,spTransform)
