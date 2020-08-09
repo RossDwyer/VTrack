@@ -28,16 +28,16 @@
 #' @importFrom sp CRS
 #' @examples
 #' ## Import example datasets
-#' data(tagdata)
+#' data(IMOSdata)
 #' data(taginfo)
 #' data(statinfo)
 #'
 #' ## Setup data
-#' ATTdata<- setupData(Tag.Detections = tagdata, Tag.Metadata = taginfo, Station.Information = statinfo)
+#' ATTdata<- setupData(Tag.Detections = IMOSdata, Tag.Metadata = taginfo, Station.Information = statinfo, source = "IMOS")
 #' ATTdata
 #'
 #'
-setupData<-function(Tag.Detections, Tag.Metadata, Station.Information, source=NULL, tz="UTC", crs=NULL){
+setupData<-function(Tag.Detections, Tag.Metadata, Station.Information, source=NULL, tzone="UTC", crs=NULL){
 
    detection_timestamp <- transmitter_id <- station_name <-receiver_name <-latitude <-longitude <- NULL
    sensor_value <-sensor_unit <-Date.and.Time..UTC. <-Transmitter <-Station.Name <-Receiver <-Latitude <- NULL
@@ -51,7 +51,7 @@ setupData<-function(Tag.Detections, Tag.Metadata, Station.Information, source=NU
 
   if(source %in% "IMOS"){
     Tag.Detections = as_tibble(Tag.Detections) %>%
-      transmute(Date.Time = lubridate::ymd_hms(detection_timestamp, tz=tz),
+      transmute(Date.Time = lubridate::ymd_hms(detection_timestamp, tz = tzone),
                 Transmitter = transmitter_id,
                 Station.Name = station_name,
                 Receiver = receiver_name,
@@ -61,7 +61,7 @@ setupData<-function(Tag.Detections, Tag.Metadata, Station.Information, source=NU
                 Sensor.Unit = sensor_unit)}
   if(source %in% "VEMCO"){
     Tag.Detections = as_tibble(Tag.Detections) %>%
-      transmute(Date.Time = lubridate::ymd_hms(Date.and.Time..UTC., tz=tz),
+      transmute(Date.Time = lubridate::ymd_hms(Date.and.Time..UTC., tz = tzone),
                 Transmitter = Transmitter,
                 Station.Name = Station.Name,
                 Receiver = Receiver,
@@ -74,7 +74,8 @@ setupData<-function(Tag.Detections, Tag.Metadata, Station.Information, source=NU
     structure(
       list(
         Tag.Detections = Tag.Detections,
-        Tag.Metadata = as_tibble(Tag.Metadata) %>%
+        Tag.Metadata = 
+          as_tibble(Tag.Metadata) %>%
           transmute(Tag.ID = tag_id,
                     Transmitter = transmitter_id,
                     Sci.Name = scientific_name,
@@ -82,19 +83,19 @@ setupData<-function(Tag.Detections, Tag.Metadata, Station.Information, source=NU
                     Tag.Project = tag_project_name,
                     Release.Latitude = release_latitude,
                     Release.Longitude = release_longitude,
-                    Release.Date = lubridate::as_date(ReleaseDate, tz=tz),
+                    Release.Date = lubridate::as_date(ReleaseDate),
                     Tag.Life = tag_expected_life_time_days,
                     Tag.Status = tag_status,
                     Sex = sex,
                     Bio = measurement),
-
-        Station.Information = as_tibble(Station.Information) %>%
+        Station.Information = 
+          as_tibble(Station.Information) %>%
           transmute(Station.Name = station_name,
                     Receiver = receiver_name,
                     Installation = installation_name,
                     Receiver.Project = project_name,
-                    Deployment.Date = lubridate::as_date(deploymentdatetime_timestamp, tz=tz),
-                    Recovery.Date = lubridate::as_date(recoverydatetime_timestamp, tz=tz),
+                    Deployment.Date = lubridate::as_date(deploymentdatetime_timestamp),
+                    Recovery.Date = lubridate::as_date(recoverydatetime_timestamp),
                     Station.Latitude = station_latitude,
                     Station.Longitude = station_longitude,
                     Receiver.Status = status)),
