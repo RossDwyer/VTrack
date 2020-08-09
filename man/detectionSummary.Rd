@@ -13,10 +13,6 @@ tag detection data, metadata and station information}
 \item{sub}{argument to define temporal subsets. Temporal subsets are currently restricted to monthly ('\%Y-\%m') or weekly ('\%Y-\%W').
 Defaults to monthly if none is provided.}
 }
-
-\item{download_date}{date the array was downloaded in the form 'yyyy-mm-dd' for calculating detection summary before the collection of full dataset has been collected.
-If none provided, it is assumed complete data has been collected, and detection indices are calculated as such.}
-}
 \value{
 Produces a list of tibbles containing Overall (full tag life) and Subsetted (user-defined temporal subsets) metrics of detection.
   Temporal subsets are currently restricted to monthly ('\%Y-\%m') or weekly ('\%Y-\%W').
