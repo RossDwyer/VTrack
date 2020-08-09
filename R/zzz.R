@@ -2,6 +2,6 @@
 
 .onLoad <- function(libname, pkgname){
   ver <- utils::packageVersion("VTrack")
-  packageStartupMessage("Loading VTrack version ", ver)
+  packageStartupMessage("VTrack version ", ver, " loaded")
 }
 
