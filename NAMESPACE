@@ -7,7 +7,6 @@ import(XML)
 import(intervals)
 import(gstat)
 import(checkmate)
-import(utils)
 importFrom(adehabitatLT,as.ltraj)
 importFrom(dplyr,left_join,mutate,group_by,ungroup,summarize,summarise,select,transmute,do,'%>%',n,n_distinct,first,filter,as_tibble,group_size)
 importFrom(sp,SpatialPoints,proj4string,coordinates,CRS,spDists,spDistsN1,SpatialLinesLengths,gridded,spTransform)
@@ -23,7 +22,7 @@ importFrom(parallel,makeCluster,stopCluster)
 importFrom(doParallel,registerDoParallel,stopImplicitCluster)
 importFrom(gdistance,shortestPath)
 importFrom(grDevices, dev.new)
-importFrom(utils, setTxtProgressBar, txtProgressBar, read.csv)
+importFrom(utils, setTxtProgressBar, txtProgressBar, read.csv, packageVersion)
 
 # Export all external functions
 export(
