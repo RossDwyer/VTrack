@@ -7,7 +7,9 @@
 #'   tag detection data, metadata and station information
 #' @param sub argument to define temporal subsets. Temporal subsets are currently restricted to monthly ('\%Y-\%m') or weekly ('\%Y-\%W').
 #'   Defaults to monthly if none is provided.
-#'
+#' @param download_date date the array was downloaded in the form 'yyyy-mm-dd' for calculating detection summary before the collection of full
+#' dataset has been collected. If none provided, it is assumed complete data has been collected, and detection indices are calculated as such.
+#' 
 #' @return Produces a list of tibbles containing Overall (full tag life) and Subsetted (user-defined temporal subsets) metrics of detection.
 #'   Temporal subsets are currently restricted to monthly ('\%Y-\%m') or weekly ('\%Y-\%W').
 #'
@@ -35,7 +37,7 @@
 #' ## Metrics of detection for each temporal subset
 #' dSum$Subsetted
 #'
-detectionSummary<-function(ATTdata, sub='%Y-%m'){
+detectionSummary <- function(ATTdata, sub = '%Y-%m', download_date = NULL){
 
   Date.Time <-Tag.ID <-Transmitter <-Sci.Name <-Sex <-Bio <-Station.Name <-Release.Date <-Tag.Life <- Days.Detected <- NULL
   uniqueStations <- Days.at.Liberty <- NULL
@@ -46,11 +48,14 @@ detectionSummary<-function(ATTdata, sub='%Y-%m'){
     stop("Sorry! I can't recognise the temporal subset chosen.\nChoose one of the following subsets:\n\tMonthly   = '%Y-%m'\n\tWeekly  = '%Y-%W'")
 
   ## Combine Tag.Detection and Tag.Metadata into a combined tibble for processing
-  combdata<- left_join(ATTdata$Tag.Detections, ATTdata$Tag.Metadata, by="Transmitter") %>%
+  combdata<- 
+    ATTdata$Tag.Detections %>% 
+    left_join(ATTdata$Tag.Metadata, by="Transmitter") %>%
     mutate(subset = as.factor(format(Date.Time, sub)))
 
   ## Detection metric calculations for full tag life
-  full<- combdata %>%
+  full<- 
+    combdata %>%
     group_by(Tag.ID) %>%
     summarize(Transmitter = first(Transmitter),
               Sci.Name = first(Sci.Name),
@@ -59,10 +64,16 @@ detectionSummary<-function(ATTdata, sub='%Y-%m'){
               Number.of.Detections = n(),
               Number.of.Stations = n_distinct(Station.Name),
               Days.Detected = n_distinct(date(Date.Time)),
-              Days.at.Liberty = as.numeric(diff(c(
-                min(first(Release.Date), min(date(Date.Time)), na.rm=T),
-                max((first(Release.Date)+first(Tag.Life)), max(date(Date.Time)), na.rm=T)))),
-              Detection.Index = Days.Detected / Days.at.Liberty)
+              start_date = min(first(Release.Date), min(date(Date.Time)), na.rm=T),
+              end_date = 
+                if(is.null(download_date)){
+                  max((first(Release.Date)+first(Tag.Life)), max(date(Date.Time)), na.rm=T)
+                } else {
+                  date(download_date)
+                },
+              Days.at.Liberty = as.numeric(diff(c(start_date, end_date))),
+              Detection.Index = Days.Detected / Days.at.Liberty) %>% 
+    dplyr::select(-c(start_date, end_date))
 
   ## Detection metric calculations for temporal subsets
   tsub<- combdata %>%

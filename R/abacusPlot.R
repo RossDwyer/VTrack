@@ -10,7 +10,7 @@
 #' @param det.col color of points indicating detections (default = "red")
 #' @param tag.col color of points indicating start and end of tag life (default = "grey")
 #' @param facet conditional argument to plot faceted plot, plotting detections by each animal on receiver stations (default = FALSE)
-#' @param new.window conditional argument for plotting in a new window (default = TRUE)
+#' @param new.window conditional argument for plotting in a new window (default = FALSE)
 #' @param ... other arguments sent to geom_points to modify plotting aesthetics
 #'
 #' @return Produces an abacus plot in a new window. Daily detections over time for each tag
@@ -36,7 +36,7 @@
 #' abacusPlot(ATTdata)
 #'
 #'
-abacusPlot<-function(ATTdata, id=NULL, theme="theme_linedraw", xlab=NULL, ylab=NULL, det.col=2, tag.col=8, facet=FALSE, new.window=TRUE, ...){
+abacusPlot<-function(ATTdata, id=NULL, theme="theme_linedraw", xlab=NULL, ylab=NULL, det.col=2, tag.col=8, facet=FALSE, new.window=FALSE, ...){
   if(!inherits(ATTdata, "ATT"))
     stop("Oops! Input data needs to be an 'ATT' object.
          \nSet up your data first using setupData() before running this operation")
