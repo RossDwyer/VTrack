@@ -313,10 +313,10 @@ function(sInputFile,sLocation,iResidenceThreshold,iTimeThreshold,sDistanceMatrix
 
   # Runs old function for >1 detections at a receiver
   if(iResidenceThreshold > 1)
-    results <- foreach(i=1:iTransmitterCount, .packages='VTrack') %dopar% ResidenceExtractId(i)
+    results <- foreach::foreach(i=1:iTransmitterCount, .packages='VTrack') %dopar% ResidenceExtractId(i)
   # Runs updated function to include single detections at a receiver 
   if(iResidenceThreshold == 1)
-    results <- foreach(i=1:iTransmitterCount, .packages='VTrack') %dopar% ResidenceExtractId1(i)
+    results <- foreach::foreach(i=1:iTransmitterCount, .packages='VTrack') %dopar% ResidenceExtractId1(i)
 
 
   # Reorganise function results to ensure all transmitters occur in relevent list fields (i.e. event, logfile, nonresidences)
