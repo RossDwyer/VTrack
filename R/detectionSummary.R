@@ -50,7 +50,7 @@ detectionSummary <- function(ATTdata, sub = '%Y-%m', download_date = NULL){
   ## Combine Tag.Detection and Tag.Metadata into a combined tibble for processing
   combdata<- 
     ATTdata$Tag.Detections %>% 
-    left_join(ATTdata$Tag.Metadata, by="Transmitter") %>%
+    left_join(ATTdata$Tag.Metadata, by = "Transmitter") %>%
     mutate(subset = as.factor(format(Date.Time, sub)))
 
   ## Detection metric calculations for full tag life
@@ -64,12 +64,12 @@ detectionSummary <- function(ATTdata, sub = '%Y-%m', download_date = NULL){
               Number.of.Detections = n(),
               Number.of.Stations = n_distinct(Station.Name),
               Days.Detected = n_distinct(date(Date.Time)),
-              start_date = min(first(Release.Date), min(date(Date.Time)), na.rm=T),
+              start_date = min(first(Release.Date), min(date(Date.Time)), na.rm = T),
               end_date = 
                 if(is.null(download_date)){
-                  max((first(Release.Date)+first(Tag.Life)), max(date(Date.Time)), na.rm=T)
+                  max((first(Release.Date)+first(Tag.Life)), max(date(Date.Time)), na.rm = T)
                 } else {
-                  date(download_date)
+                  min((first(Release.Date)+first(Tag.Life)), date(download_date), na.rm = T)
                 },
               Days.at.Liberty = as.numeric(diff(c(start_date, end_date))),
               Detection.Index = Days.Detected / Days.at.Liberty) %>% 
