@@ -6,7 +6,7 @@
   
   ## Check if an updated version of VTrack is available on GitHub
   github_url <- readLines("https://raw.githubusercontent.com/rossdwyer/VTrack/master/DESCRIPTION")
-  github_ver <- as.numeric(gsub("Version:\\s*", "", github_url[grep("Version:", x)]))
+  github_ver <- as.numeric(gsub("Version:\\s*", "", github_url[grep("Version:", github_url)]))
   
   if(github_ver > ver){
     packageStartupMessage(paste0("===========================================================",
