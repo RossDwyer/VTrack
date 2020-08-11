@@ -22,7 +22,7 @@ importFrom(parallel,makeCluster,stopCluster)
 importFrom(doParallel,registerDoParallel,stopImplicitCluster)
 importFrom(gdistance,shortestPath)
 importFrom(grDevices, dev.new)
-importFrom(utils, setTxtProgressBar, txtProgressBar, read.csv, packageVersion)
+importFrom(utils, setTxtProgressBar, txtProgressBar, read.csv, packageDescription)
 
 # Export all external functions
 export(
