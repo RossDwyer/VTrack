@@ -1,7 +1,7 @@
 ## Processing functions on startup of package
 
 .onAttach <- function(libname, pkgname){
-  ver <- as.numeric(utils::packageDescription("Vtrack", fields = c("Version")))
+  ver <- as.numeric(utils::packageDescription("VTrack", fields = c("Version")))
   packageStartupMessage("VTrack version ", ver, " loaded")
   
   ## Check if an updated version of VTrack is available on GitHub
