@@ -17,23 +17,26 @@ https://cran.r-project.org/web/packages/VTrack/index.html
 \tabular{ll}{
 Package: \tab VTrack\cr
 Type: \tab Package\cr
-Version: \tab 2.01\cr
-Date: \tab 2019-01-10\cr
+Version: \tab 2.10\cr
+Date: \tab 2021-01-27\cr
 License: \tab GPL(>=2)\cr
 }
 
 }
 \author{
-Ross Dwyer, Mathew Watts, Craig Franklin 
-School of Biological Sciences, University of Queensland, StLucia, Queensland, Australia.
-
-Hamish Campbell
-Charles Darwin UNiversity
+Ross Dwyer
+University of the Sunshine Coast
 
 Vinay Udyawer
 Australian Institute for Marine Sciences
 
-Maintainer: Ross Dwyer <ross.dwyer@uq.edu.au>
+Hamish Campbell
+Charles Darwin University
+
+Mathew Watts, Craig Franklin 
+University of Queensland
+
+Maintainer: Ross Dwyer <ross.dwyer@usc.edu.au>
 
 }
 \references{

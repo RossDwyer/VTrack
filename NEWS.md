@@ -8,4 +8,6 @@
 * `HRSummary()` function added to package
 * `setupData()` function added to package
 
+# VTrack 2.1
+* Amended `RunResidenceExtraction()` function to better handle timeout events
 
