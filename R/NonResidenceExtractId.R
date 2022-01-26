@@ -20,25 +20,27 @@ function(sResidenceEventFile,sDistanceMatrix=NULL)
     TRANSMITTERID <- sResidenceEventFile[c(2:length(sResidenceEventFile[,2])),4]
     DURATION <- as.numeric(difftime(as.POSIXct(ENDTIME), as.POSIXct(STARTTIME), units = "secs"))
     
-    # Remove data where animal moves between the same receivers/stations
-    NONRESIDENCEEVENT <- ifelse(as.character(RECEIVERID1) == as.character(RECEIVERID2),NA,1)
-    nonresidencetable <- na.omit(data.frame(STARTTIME,ENDTIME,NONRESIDENCEEVENT,TRANSMITTERID,RECEIVERID1,
-                                            RECEIVERID2,DURATION))
-    if(is.null(sDistanceMatrix)!=TRUE)
-    {
-      DISTANCE <- ReturnVR2Distance(nonresidencetable,sDistanceMatrix)*1000 #Convert km into meters
+    # modification 
+    NONRESIDENCEEVENT <- 1
+    nonresidencetable <- na.omit(data.frame(STARTTIME, ENDTIME, 
+                                            NONRESIDENCEEVENT, TRANSMITTERID, RECEIVERID1, RECEIVERID2, 
+                                            DURATION))
+    
+    if (is.null(sDistanceMatrix) != TRUE) {
+      DISTANCE <- ReturnVR2Distance(nonresidencetable, 
+                                    sDistanceMatrix) * 1000
       ROM <- DISTANCE/nonresidencetable$DURATION
-    }else{
+    }
+    else {
       DISTANCE <- 0
       ROM <- 0
     }
-    
-    newnonresidencetable <- data.frame(nonresidencetable,DISTANCE,ROM)
-    
+    newnonresidencetable <- data.frame(nonresidencetable, 
+                                       DISTANCE, ROM)
   }
-  # Assign non-residence id to non-residence table
-  if(nrow(newnonresidencetable) >= 1)  
-    newnonresidencetable$NONRESIDENCEEVENT <- c(1:length(newnonresidencetable[,1]))
   
+  if (nrow(newnonresidencetable) >= 1) 
+    newnonresidencetable$NONRESIDENCEEVENT <- c(1:length(newnonresidencetable[, 
+                                                                              1]))
   return(newnonresidencetable)
 }

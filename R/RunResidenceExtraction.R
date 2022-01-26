@@ -5,13 +5,9 @@ function(sInputFile,sLocation,iResidenceThreshold,iTimeThreshold,sDistanceMatrix
 {
   i <- NULL 
 
-  #iCores <- parallel::detectCores()
-
   cl <- makeCluster(iCores)
   registerDoParallel(cl)
-  #on.exit(stopCluster(cl))
   
-
   # Check data are in chronological order and duplicates-free
   sInputFile <- unique(sInputFile[order(as.character(sInputFile$DATETIME)),]) 
   
@@ -41,7 +37,7 @@ function(sInputFile,sLocation,iResidenceThreshold,iTimeThreshold,sDistanceMatrix
                            RECEIVERID=as.character(sInputFile[1,iLocationCol]),ELAPSED=0,stringsAsFactors=FALSE)[NULL,]
     
     # For each transmitter, extract records for only this transmitter
-    infile<-ExtractData(sInputFile, sQueryTransmitterList = TransmitterNames[sTransmitterId])
+    infile <- ExtractData(sInputFile, sQueryTransmitterList = TransmitterNames[sTransmitterId])
       
     # Initialise variables for this transmitter
     fResidenceEventStarted <- FALSE
@@ -78,8 +74,8 @@ function(sInputFile,sLocation,iResidenceThreshold,iTimeThreshold,sDistanceMatrix
           fResidenceEventStarted <- FALSE
           sEndReason <- "timeout"
         }
-        # New receiver/station
-        if (sPreviousReceiver != sRECEIVERID)
+        # New receiver/station (modification)
+        if (iElapsedTime <= iTimeThreshold & sPreviousReceiver != sRECEIVERID) 
         {
           fResidenceEventStarted <- FALSE
           sEndReason <- "receiver"
@@ -102,8 +98,6 @@ function(sInputFile,sLocation,iResidenceThreshold,iTimeThreshold,sDistanceMatrix
                                                   RESIDENCEEVENT=iResidenceEvents,TRANSMITTERID=as.character(TransmitterNames[sTransmitterId]),
                                                   RECEIVERID=as.character(sPreviousReceiver),DURATION=iElapsedTime,ENDREASON=sEndReason,
                                                   NUMRECS=iNumberOfRecords,stringsAsFactors=FALSE)
-#            if(sEndReason=="signal lost")
-#              iResidenceEvents <- iResidenceEvents + 1
           }
         }
       }else{
@@ -205,8 +199,8 @@ function(sInputFile,sLocation,iResidenceThreshold,iTimeThreshold,sDistanceMatrix
             fResidenceEventStarted <- FALSE
             sEndReason <- "timeout"
           }
-          # New receiver/station
-          if(sPreviousReceiver != sRECEIVERID)
+          # New receiver/station (modification)
+          if (iElapsedTime <= iTimeThreshold & sPreviousReceiver != sRECEIVERID) 
           {
             fResidenceEventStarted <- FALSE
             sEndReason <- "receiver"
@@ -248,8 +242,8 @@ function(sInputFile,sLocation,iResidenceThreshold,iTimeThreshold,sDistanceMatrix
         # Timeout period
           if(iElapsedTime > iTimeThreshold)
             sEndReason <- "timeout"
-        # New receiver/station
-          if(sPreviousReceiver != sRECEIVERID)
+        # New receiver/station (modification)
+          if (iElapsedTime <= iTimeThreshold & sPreviousReceiver != sRECEIVERID) 
             sEndReason <- "receiver"
         # Lost signal
           if(iCount == nrow(infile))
@@ -321,8 +315,8 @@ function(sInputFile,sLocation,iResidenceThreshold,iTimeThreshold,sDistanceMatrix
     results <- foreach::foreach(i=1:iTransmitterCount, .packages='VTrack') %dopar% ResidenceExtractId1(i)
 
 
-  # Reorganise function results to ensure all transmitters occur in relevent list fields (i.e. event, logfile, nonresidences)
-  # Ensure data headers are correct and the relevent fields are represented (i.e. Station and Receiver)
+  # Re-organise function results to ensure all transmitters occur in relevant list fields (i.e. event, logfile, nonresidences)
+  # Ensure data headers are correct and the relevant fields are represented (i.e. Station and Receiver)
   ilist2 <- new.env()
   ilist2$residences <- do.call(rbind,(do.call(rbind,results)[,2]))
   names(ilist2$residences)[5] <- sLocation
@@ -334,5 +328,4 @@ function(sInputFile,sLocation,iResidenceThreshold,iTimeThreshold,sDistanceMatrix
   return(as.list(ilist2))
 
   stopImplicitCluster()
-  #registerDoSEQ(cl)
 }
