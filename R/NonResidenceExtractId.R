@@ -5,7 +5,7 @@ function(sResidenceEventFile,sDistanceMatrix=NULL)
     stop('length(TRANSMITTERID) > 1. Unable to extract non-residences.')  
 
   # Non-residence must contain at least two residences for that transmitter
-  if(length(unique(sResidenceEventFile[,5])) < 2)
+  if(nrow(sResidenceEventFile) < 2) # Suggestion 1
   {
     # Write an empty table
     newnonresidencetable <- data.frame(STARTTIME=sResidenceEventFile[1,1],ENDTIME=sResidenceEventFile[1,2],
@@ -21,7 +21,7 @@ function(sResidenceEventFile,sDistanceMatrix=NULL)
     DURATION <- as.numeric(difftime(as.POSIXct(ENDTIME), as.POSIXct(STARTTIME), units = "secs"))
     
     # modification 
-    NONRESIDENCEEVENT <- 1
+    NONRESIDENCEEVENT <- seq(1:(nrow(sResidenceEventFile)-1)) # Suggestion #4
     nonresidencetable <- na.omit(data.frame(STARTTIME, ENDTIME, 
                                             NONRESIDENCEEVENT, TRANSMITTERID, RECEIVERID1, RECEIVERID2, 
                                             DURATION))
@@ -29,18 +29,17 @@ function(sResidenceEventFile,sDistanceMatrix=NULL)
     if (is.null(sDistanceMatrix) != TRUE) {
       DISTANCE <- ReturnVR2Distance(nonresidencetable, 
                                     sDistanceMatrix) * 1000
-      ROM <- DISTANCE/nonresidencetable$DURATION
+      ROM <- rep(NA, nrow(nonresidencetable)) # Suggestion #3
+      ROM[which(RECEIVERID1 != RECEIVERID2)] <- DISTANCE[which(RECEIVERID1 != RECEIVERID2)]/
+              nonresidencetable$DURATION[which(RECEIVERID1 != RECEIVERID2)] # Suggestion #3
     }
     else {
-      DISTANCE <- 0
-      ROM <- 0
+      DISTANCE <- NA # Suggestion #2
+      ROM <- NA #Suggestion #2
     }
     newnonresidencetable <- data.frame(nonresidencetable, 
                                        DISTANCE, ROM)
   }
   
-  if (nrow(newnonresidencetable) >= 1) 
-    newnonresidencetable$NONRESIDENCEEVENT <- c(1:length(newnonresidencetable[, 
-                                                                              1]))
   return(newnonresidencetable)
 }
