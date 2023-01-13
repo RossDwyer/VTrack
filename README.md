@@ -19,14 +19,7 @@ The 'VTrack' package was built to facilitate the assimilation, analysis and synt
 
 # Installation and usage
 
-The `VTrack` package can be found on [CRAN](https://cran.r-project.org/web/packages/VTrack/index.html)
-
-The package can be installed directly from R:
-```ruby
-install.packages("VTrack")
-```
-
-The development version of the package can is also available via this Github page:
+The development version of the `VTrack` package can is available via this Github page:
 ```ruby
 install.packages("devtools")
 devtools::install_github("rossdwyer/VTrack")
