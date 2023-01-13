@@ -19,7 +19,7 @@ The 'VTrack' package was built to facilitate the assimilation, analysis and synt
 
 # Installation and usage
 
-The development version of the `VTrack` package can is available via this Github page:
+The development version of the `VTrack` package is available via this Github page:
 ```ruby
 install.packages("devtools")
 devtools::install_github("rossdwyer/VTrack")
