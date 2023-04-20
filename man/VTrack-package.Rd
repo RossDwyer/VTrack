@@ -17,8 +17,8 @@ https://cran.r-project.org/web/packages/VTrack/index.html
 \tabular{ll}{
 Package: \tab VTrack\cr
 Type: \tab Package\cr
-Version: \tab 2.10\cr
-Date: \tab 2021-01-27\cr
+Version: \tab 2.11\cr
+Date: \tab 2023-04-20\cr
 License: \tab GPL(>=2)\cr
 }
 
