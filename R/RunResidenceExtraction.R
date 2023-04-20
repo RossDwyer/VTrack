@@ -433,5 +433,3 @@ RunResidenceExtraction <-
   doParallel::stopImplicitCluster()
   parallel::stopCluster(cl) # added in Nov 2022
 }
-
-}
