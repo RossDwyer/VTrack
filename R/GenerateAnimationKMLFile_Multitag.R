@@ -20,6 +20,7 @@ function (sInputFile,sPointsFile,sOutputFile,sLocation="RECEIVERID")
                        proj4string = CRS("+proj=longlat +datum=WGS84"))
   Multitag <- STIDF(spp, time = Vfish8$DATE, data = Vfish8[, 
                                                            c("LOCATION", "COUNT")])
-  kml(Multitag, file = sOutputFile, shape = "http://maps.google.com/mapfiles/kml/pal2/icon18.png", 
-      colour = COUNT, size = COUNT, alpha = 0.75, labels = LOCATION)
+  #drop code line that relied on plotKML package
+  #kml(Multitag, file = sOutputFile, shape = "http://maps.google.com/mapfiles/kml/pal2/icon18.png", 
+  #    colour = COUNT, size = COUNT, alpha = 0.75, labels = LOCATION)
 }
