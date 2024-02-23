@@ -18,9 +18,9 @@ function (sInputFile,sPointsFile,sOutputFile,sLocation="RECEIVERID")
   Vfish8$DATE <- as.POSIXct(Vfish8$DATE, format = "%Y-%m-%d")
   spp <- SpatialPoints(Vfish8[, c("LONGITUDE", "LATITUDE")], 
                        proj4string = CRS("+proj=longlat +datum=WGS84"))
-  Multitag <- STIDF(spp, time = Vfish8$DATE, data = Vfish8[, 
-                                                           c("LOCATION", "COUNT")])
-  #drop code line that relied on plotKML package
+  #drop code lines that relied on plotKML package
+  #Multitag <- STIDF(spp, time = Vfish8$DATE, data = Vfish8[, 
+  #                                                         c("LOCATION", "COUNT")])
   #kml(Multitag, file = sOutputFile, shape = "http://maps.google.com/mapfiles/kml/pal2/icon18.png", 
   #    colour = COUNT, size = COUNT, alpha = 0.75, labels = LOCATION)
 }
