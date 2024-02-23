@@ -7,7 +7,7 @@ Author: Ross G. Dwyer, Vinay Udyawer, Mathew E. Watts, Craig E. Franklin & Hamis
 Maintainer: Ross Dwyer <ross.dwyer@uq.edu.au>
 Description: Designed to facilitate the assimilation, analysis and synthesis of animal location and movement data collected by the VEMCO suite of acoustic transmitters and receivers. As well as database and geographic information capabilities the principal feature of VTrack is the qualification and identification of ecologically relevant events from the acoustic detection and sensor data. This procedure condenses the acoustic detection database by orders of magnitude, greatly enhancing the synthesis of acoustic detection data.
 Depends: R (>= 3.3.0), foreach(>= 1.2.0)
-Imports: plotKML, sp, spacetime, doParallel, XML, intervals, gstat, checkmate, gdistance, raster, dplyr, ggplot2, lubridate, maptools, adehabitatHR,adehabitatLT   
+Imports: sp, spacetime, doParallel, XML, intervals, gstat, checkmate, gdistance, raster, dplyr, ggplot2, lubridate, maptools, adehabitatHR,adehabitatLT   
 License: GPL (>= 2)
 URL: https://CRAN.R-project.org/package=VTrack
 Encoding: latin1
