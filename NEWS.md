@@ -11,3 +11,5 @@
 # VTrack 2.1
 * Amended `RunResidenceExtraction()` function to better handle timeout events
 
+# VTrack 2.2
+* Removed plotKML from required packages

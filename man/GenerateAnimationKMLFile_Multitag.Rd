@@ -61,8 +61,8 @@
                                       "Croc Multi.kml",
                                       sLocation="RECEIVERID")
                                       
-    # This file can be found within the tempdir() directory on your computer. 
-    # Double-click on the .kml file to open in Google Earth
+    # Note, due to the decommissioning of the plotKML package, this function is no longer operational
+    # please use the GenerateAnimationKMLFile_Track function instead
 }
 }
 \keyword{behaviour}
