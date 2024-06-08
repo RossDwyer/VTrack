@@ -9,14 +9,15 @@
 #' @param source character indicating source of Tag.Detection data. "IMOS" for data downloaded from IMOS data repository
 #'  and "VEMCO" for data exported from the VEMCO VUE database
 #' @param tzone time zone of date time information in Tag.Detections, Tag.Metadata and Station.Information. If none provided defaults to "UTC"
-#' @param crs geographic coordinate system for all Tag.Detections, Tag.Metadata and Station.Information (latitude/longitude). If none provided defaults to WGS84.
+#' @param crs EPSG code for geographic coordinate system for all Tag.Detections, Tag.Metadata and Station.Information (latitude/longitude). If none provided defaults to EPSG 4326 (WGS84). 
+#' With the retirement of several spatial packages in R, this package will update the way it handles coordinate reference systems (CRS). 
 #'
 #' @return Produces an 'ATT' object that is a list of tibbles containing Tag.Detections, Tag.Metadata and Station.Information.
 #'   The 'ATT' object will have a geographic coordinate system associated with it for smoother functioning of subsequent functions.
 #'
 #' @seealso setup data can be used to estimate detection \code{\link{detectionSummary}}, dispersal \code{\link{dispersalSummary}}
 #'   and Short-term center of activity \code{\link{COA}}.
-#' @export
+#' 
 #' @importFrom magrittr %>%
 #' @importFrom dplyr left_join
 #' @importFrom dplyr mutate
@@ -25,7 +26,8 @@
 #' @importFrom dplyr select
 #' @importFrom lubridate ymd_hms
 #' @importFrom lubridate date
-#' @importFrom sp CRS
+#' @importFrom sf st_crs
+#' 
 #' @examples
 #' ## Import example datasets
 #' data(IMOSdata)
@@ -39,20 +41,20 @@
 #'                     source = "IMOS")
 #'
 #' ATTdata
-#'
-#'
-setupData<-function(Tag.Detections, Tag.Metadata, Station.Information, source=NULL, tzone="UTC", crs=NULL){
+#' 
+#' @export
 
-   detection_timestamp <- transmitter_id <- station_name <-receiver_name <-latitude <-longitude <- NULL
-   sensor_value <-sensor_unit <-Date.and.Time..UTC. <-Transmitter <-Station.Name <-Receiver <-Latitude <- NULL
-   Longitude <-Sensor.Value <-Sensor.Unit <-tag_id <- scientific_name <- common_name <- tag_project_name <- NULL
-   release_latitude <- release_longitude <- ReleaseDate <- tag_expected_life_time_days <- tag_status <- sex <- NULL
-   measurement <- installation_name <- project_name <- deploymentdatetime_timestamp <- recoverydatetime_timestamp <- NULL
-   station_latitude <- station_longitude <- status <- NULL
+setupData <- function(Tag.Detections,
+                      Tag.Metadata,
+                      Station.Information,
+                      source = NULL,
+                      tzone = "UTC",
+                      crs = NULL) {
+  
   
   if(is.null(source))
     stop("Can't recognize the source of your tag detection data.\n'source' should be either 'IMOS' or 'VEMCO'")
-
+  
   if(source %in% "IMOS"){
     Tag.Detections = as_tibble(Tag.Detections) %>%
       transmute(Date.Time = lubridate::ymd_hms(detection_timestamp, tz = tzone),
@@ -104,13 +106,13 @@ setupData<-function(Tag.Detections, Tag.Metadata, Station.Information, source=NU
                     Station.Longitude = station_longitude,
                     Receiver.Status = status)),
 
-      class="ATT")
+      class = "ATT")
 
-  if(inherits(crs, "CRS")){
-    attr(object, "CRS")<-crs
+  if(is.double(crs)){
+    attr(object, "CRS")<- st_crs(crs)
     }else{
-      message("Geographic projection for detection positions not recognised, reverting to WGS84 global coordinate reference system")
-      attr(object, "CRS")<-CRS("+init=epsg:4326")
+      message("Geographic projection for detection positions not recognised, reverting to EPSG:4326 global coordinate reference system (WGS84)")
+      attr(object, "CRS")<- st_crs(4326)
     }
 
   return(object)
