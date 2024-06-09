@@ -1,6 +1,6 @@
 #' Calculate standard metrics of detection using passive telemetry data
 #'
-#'@description Produce standard metrics of detection. Metrics include Number of detections, Number of receiver stations
+#' @description Produce standard metrics of detection. Metrics include Number of detections, Number of receiver stations
 #'  detected on, Number of days detected, Number of Days at Liberty and Detection Index.
 #'
 #' @param ATTdata an 'ATT' object created using \code{\link{setupData}} containing
