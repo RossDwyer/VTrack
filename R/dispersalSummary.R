@@ -11,7 +11,7 @@
 #'
 #' @seealso Input data needs to be setup using \code{\link{setupData}}
 #' 
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #' @importFrom dplyr left_join
 #' @importFrom dplyr filter
 #' @importFrom dplyr mutate
@@ -27,6 +27,7 @@
 #' @importFrom sf st_distance
 #' @importFrom sf geometry
 #' @importFrom sf st_coordinates
+#' @importFrom geosphere bearing
 #' 
 #' @examples
 #' ## Import example datasets
