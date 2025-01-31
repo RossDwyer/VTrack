@@ -4,9 +4,10 @@
 # VTrack
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/VTrack)](https://cran.r-project.org/package=VTrack)
-[![CRAN_Downloads](http://cranlogs.r-pkg.org/badges/VTrack)](http://www.r-pkg.org/pkg/VTrack)
-[![CRAN_Downloads](http://cranlogs.r-pkg.org/badges/grand-total/VTrack)](http://r-pkg.org/pkg/VTrack)
+[![issues - VTrack](https://img.shields.io/github/issues/RossDwyer/VTrack)](https://github.com/RossDwyer/VTrack/issues)
+[![stars - VTrack](https://img.shields.io/github/stars/RossDwyer/VTrack?style=social)](https://github.com/RossDwyer/VTrack)
+[![forks - VTrack](https://img.shields.io/github/forks/RossDwyer/VTrack?style=social)](https://github.com/RossDwyer/VTrack)
+[![watchers - VTrack](https://img.shields.io/github/watchers/RossDwyer/VTrack?style=social)](https://github.com/RossDwyer/VTrack)
 
 <br>
 
