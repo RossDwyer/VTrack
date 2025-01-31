@@ -27,12 +27,14 @@
 #'   included if cumulative=TRUE.
 #'
 #' @seealso Input data needs to be setup using \code{\link{setupData}}, and COAs calculated using \code{\link{COA}}.
-#' @export
+#' 
+#' @importFrom dplyr %>%
 #' @importFrom dplyr left_join
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
 #' @importFrom dplyr summarize
 #' @importFrom dplyr select
+#' 
 #' @examples
 #' ## Import example datasets
 #' data(IMOSdata)
@@ -70,10 +72,21 @@
 #'                    cont=c(20,50,95), 
 #'                    storepoly=TRUE)
 #'
-#'
-HRSummary<-function(COAdata, projCRS, type="MCP", cont=c(50,95), sub='%Y-%m', cumulative=FALSE, storepoly=FALSE, h=500, ext=2, grid=200, div=4){
+#' @export
 
-  TimeStep.coa <-Tag.ID <- Sci.Name <- Common.Name <- Tag.Project <- Release.Date <- Tag.Life<-Sex<-Bio<-Number.of.Detections <- NULL
+HRSummary <- function(COAdata,
+                      projCRS,
+                      type = "MCP",
+                      cont = c(50, 95),
+                      sub = '%Y-%m',
+                      cumulative =
+                        FALSE,
+                      storepoly = FALSE,
+                      h = 500,
+                      ext = 2,
+                      grid = 200,
+                      div = 4) {
+  
   
   if(!inherits(COAdata, "COA"))
     stop("Oops! Input data needs to be a 'COA' object.\nEstimate Short-term Center of Activities first using COA() before running this operation.")
@@ -89,7 +102,7 @@ HRSummary<-function(COAdata, projCRS, type="MCP", cont=c(50,95), sub='%Y-%m', cu
   }
 
   ## Define Geographic CRS (extracted from COA object) and Projected CRS (user defined)
-  ll=attr(COAdata, "CRS"); utm=projCRS
+  ll = attr(COAdata, "CRS"); utm = projCRS
 
   ## Set up master data frames to fill with activity space estimates
   full<- dat %>%

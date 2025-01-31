@@ -25,7 +25,7 @@
 #'   included if cumulative=TRUE.
 #'
 #' @seealso Input data needs to be setup using \code{\link{setupData}}, and COAs calculated using \code{\link{COA}}.
-#' @export
+
 #' @import adehabitatHR
 #' @import sp
 #' @importFrom raster spTransform
@@ -36,9 +36,22 @@
 #' @importFrom dplyr summarize
 #' @importFrom dplyr select
 #' @importFrom lubridate ymd_hms
-HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%Y-%m", cont=c(50,95), cumulative=FALSE, storepoly=FALSE, div=4){
+#' 
+#' @export
 
-  TimeStep.coa <- Latitude.coa <- Longitude.coa <- V1 <- Tag.ID <- raster <- NULL 
+HRprocess <- function(cenac,
+                      utm,
+                      ll,
+                      type = "MCP",
+                      h = 200,
+                      ext = 2,
+                      grid = 200,
+                      sub = "%Y-%m",
+                      cont = c(50, 95),
+                      cumulative = FALSE,
+                      storepoly = FALSE,
+                      div = 4) {
+  
   
   ## add subset column
   cenac <- mutate(cenac, subset = factor(format(TimeStep.coa, sub)))

@@ -21,7 +21,7 @@
 #' @importFrom dplyr left_join
 #' @importFrom dplyr filter
 #' @importFrom dplyr group_by
-#' @importFrom dplyr summarize
+#' @importFrom dplyr summarise
 #' @import ggplot2
 #' @examples
 #' ## Import example datasets
@@ -68,28 +68,39 @@ abacusPlot <- function(ATTdata,
   }
 
   ## Find start and end date of taglife
-  ss <- combdata %>%
-    group_by(Tag.ID) %>%
-    summarize(Start = min(first(Release.Date), min(date(Date.Time)), na.rm = TRUE),
-              End = max((first(Release.Date) + first(Tag.Life)), max(date(Date.Time)), na.rm = TRUE))
-
+  ss <- 
+    combdata %>%
+    group_by(Tag.ID = factor(Tag.ID)) %>%
+    summarise(Start = first(Release.Date),
+              End = first(Release.Date) + first(Tag.Life))
+  
+  if(any(is.na(ss[,c("Start", "End")]))){
+    message("One or more tags don't have a Release date or Estimated tag life information associated.")
+  }  
+  
   if(new.window){dev.new(noRStudioGD=TRUE, width=9, height=6)}
 
   if(facet){
-    ggplot(combdata) +
+    combdata %>%
+      group_by(Date.Time = date(Date.Time), Tag.ID = factor(Tag.ID), Station.Name = factor(Station.Name)) %>%
+      summarise(num_det = n(), .groups = "keep") %>%
+      ggplot() +
       xlab(ifelse(!is.null(xlab), xlab, "Date")) + ylab(ifelse(!is.null(ylab), ylab, "Station Name")) +
       geom_point(aes(x = date(Date.Time), y = as.factor(Station.Name)), col = det.col, ...) +
-      geom_vline(data = ss, aes(xintercept = Start), col = tag_start.col) +
-      geom_vline(data = ss, aes(xintercept = End), col = tag_end.col) +
-      facet_wrap(~Tag.ID) +
+      geom_vline(data = ss, aes(xintercept = Start), col = tag_start.col, na.rm = T) +
+      geom_vline(data = ss, aes(xintercept = End), col = tag_end.col, na.rm = T) +
+      facet_wrap(~factor(Tag.ID)) +
       scale_x_date(date_labels = "%b\n%Y", minor_breaks = NULL) +
       eval(call(theme))
   }else{
-    ggplot(combdata) +
+    combdata %>%
+      group_by(Date.Time = date(Date.Time), Tag.ID = factor(Tag.ID)) %>%
+      summarise(num_det = n(), .groups = "keep") %>%
+      ggplot() +
       xlab(ifelse(!is.null(xlab), xlab, "Date")) + ylab(ifelse(!is.null(ylab), ylab, "Tag ID")) +
       geom_point(aes(x = date(Date.Time), y = as.factor(Tag.ID)), col = det.col, ...) +
-      geom_point(data = ss, aes(x = Start, y = as.factor(Tag.ID)), pch = "|", col = tag_start.col, cex = 3) +
-      geom_point(data = ss, aes(x = End, y = as.factor(Tag.ID)), pch = "|", col = tag_end.col, cex = 3) +
+      geom_point(data = ss, aes(x = Start, y = as.factor(Tag.ID)), pch = "|", col = tag_start.col, cex = 3, na.rm = T) +
+      geom_point(data = ss, aes(x = End, y = as.factor(Tag.ID)), pch = "|", col = tag_end.col, cex = 3, na.rm = T) +
       scale_x_date(date_labels = "%b\n%Y", minor_breaks = NULL) +
       eval(call(theme))
   }

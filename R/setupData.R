@@ -111,7 +111,7 @@ setupData <- function(Tag.Detections,
   if(is.double(crs)){
     attr(object, "CRS")<- st_crs(crs)
     }else{
-      message("Geographic projection for detection positions not recognised, reverting to EPSG:4326 global coordinate reference system (WGS84)")
+      message("Geographic projection for detection positions not recognised or provided \nReverting to EPSG:4326 global coordinate reference system (WGS84)")
       attr(object, "CRS")<- st_crs(4326)
     }
 
