@@ -108,14 +108,14 @@ HRSummary <- function(COAdata,
   ## Set up master data frames to fill with activity space estimates
   full <- 
     dat %>%
-    group_by(Tag.ID = factor(Tag.ID), Sci.Name, Common.Name, Tag.Project, 
+    group_by(Tag.ID = as.character(Tag.ID), Sci.Name, Common.Name, Tag.Project, 
              Release.Date, Tag.Life, Sex, Bio) %>%
     summarize(Number.of.Detections = sum(Number.of.Detections), .groups = "keep") %>%
     ungroup()
 
   tsub <- 
     dat %>%
-    group_by(Tag.ID = factor(Tag.ID), subset, Sci.Name, Common.Name, 
+    group_by(Tag.ID = as.character(Tag.ID), subset, Sci.Name, Common.Name, 
              Tag.Project, Release.Date, Tag.Life, Sex, Bio) %>%
     summarize(Number.of.Detections = sum(Number.of.Detections), .groups = "keep") %>%
     ungroup()
@@ -138,6 +138,7 @@ HRSummary <- function(COAdata,
         if(storepoly){
           polyout <- list()
           polyout[[full$Tag.ID[i]]] <- prep$sp
+          
         }
         
         } else {
