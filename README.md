@@ -4,7 +4,10 @@
 # VTrack
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+![version](https://img.shields.io/badge/version-2.30-blue)
 [![issues - VTrack](https://img.shields.io/github/issues/RossDwyer/VTrack)](https://github.com/RossDwyer/VTrack/issues)
+
+
 [![stars - VTrack](https://img.shields.io/github/stars/RossDwyer/VTrack?style=social)](https://github.com/RossDwyer/VTrack)
 [![forks - VTrack](https://img.shields.io/github/forks/RossDwyer/VTrack?style=social)](https://github.com/RossDwyer/VTrack)
 [![watchers - VTrack](https://img.shields.io/github/watchers/RossDwyer/VTrack?style=social)](https://github.com/RossDwyer/VTrack)
