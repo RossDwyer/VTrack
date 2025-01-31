@@ -70,7 +70,8 @@ COA <- function(ATTdata,
               Number.of.Stations = n_distinct(Station.Name),
               Number.of.Detections = n(), 
               .groups = "keep") %>%
-    mutate(TimeStep.coa = lubridate::as_datetime(TimeStep.coa))
+    mutate(TimeStep.coa = lubridate::as_datetime(TimeStep.coa)) %>% 
+    group_by(Tag.ID)
 
   if(length(group_size(cenac)) > 1 & split == TRUE){
     cenac <- split(cenac, cenac$Tag.ID)

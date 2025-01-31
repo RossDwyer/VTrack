@@ -32,6 +32,7 @@
 #' @importFrom dplyr left_join
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
+#' @importFrom dplyr ungroup
 #' @importFrom dplyr summarize
 #' @importFrom dplyr select
 #' 
@@ -79,8 +80,7 @@ HRSummary <- function(COAdata,
                       type = "MCP",
                       cont = c(50, 95),
                       sub = '%Y-%m',
-                      cumulative =
-                        FALSE,
+                      cumulative = FALSE,
                       storepoly = FALSE,
                       h = 500,
                       ext = 2,
@@ -95,75 +95,76 @@ HRSummary <- function(COAdata,
   if(!sub %in% c('%Y-%m','%Y-%W'))
     stop("Hmm.. I can't recognise the temporal subset chosen.\nChoose one of the following subsets:\n\tMonthly   = '%Y-%m'\n\tWeekly  = '%Y-%W'")
   if(inherits(COAdata, "list")){
-    dat<- do.call(rbind, COAdata)
-    dat<- mutate(dat, subset = format(TimeStep.coa, sub))
+    dat <- do.call(rbind, COAdata)
+    dat <- mutate(dat, subset = format(TimeStep.coa, sub))
   }else{
-    dat<- COAdata %>% mutate(subset = format(TimeStep.coa, sub))
+    dat <- COAdata %>% mutate(subset = format(TimeStep.coa, sub))
   }
 
   ## Define Geographic CRS (extracted from COA object) and Projected CRS (user defined)
-  ll = attr(COAdata, "CRS"); utm = projCRS
+  ll <- CRS(attr(COAdata, "CRS")$input)
+  utm <- projCRS
 
   ## Set up master data frames to fill with activity space estimates
-  full<- dat %>%
-    group_by(Tag.ID) %>%
-    summarize(Sci.Name = first(Sci.Name),
-              Common.Name = first(Common.Name),
-              Tag.Project = first(Tag.Project),
-              Release.Date = first(Release.Date),
-              Tag.Life = first(Tag.Life),
-              Sex = first(Sex),
-              Bio = first(Bio),
-              Number.of.Detections = sum(Number.of.Detections)) %>%
-    mutate(Tag.ID = as.character(Tag.ID))
+  full <- 
+    dat %>%
+    group_by(Tag.ID = factor(Tag.ID), Sci.Name, Common.Name, Tag.Project, 
+             Release.Date, Tag.Life, Sex, Bio) %>%
+    summarize(Number.of.Detections = sum(Number.of.Detections), .groups = "keep") %>%
+    ungroup()
 
-  tsub<- dat %>%
-    group_by(Tag.ID, subset) %>%
-    summarize(Sci.Name = first(Sci.Name),
-              Common.Name = first(Common.Name),
-              Tag.Project = first(Tag.Project),
-              Release.Date = first(Release.Date),
-              Tag.Life = first(Tag.Life),
-              Sex = first(Sex),
-              Bio = first(Bio),
-              Number.of.Detections = sum(Number.of.Detections)) %>%
-    ungroup() %>%
-    mutate(Tag.ID = as.character(Tag.ID))
+  tsub <- 
+    dat %>%
+    group_by(Tag.ID = factor(Tag.ID), subset, Sci.Name, Common.Name, 
+             Tag.Project, Release.Date, Tag.Life, Sex, Bio) %>%
+    summarize(Number.of.Detections = sum(Number.of.Detections), .groups = "keep") %>%
+    ungroup()
 
   if(cumulative){message("You have set the operation to calculate cumulative activity space metrics. This might take some time...")}
 
   for(i in 1:nrow(full)){
-    cenac<-filter(dat, Tag.ID %in% full$Tag.ID[i])
+    cenac <- filter(dat, Tag.ID %in% full$Tag.ID[i])
     tryCatch({
-      prep<-HRprocess(cenac, utm=utm, ll=ll, type=type, cont=cont, sub=sub, cumulative=cumulative, storepoly=storepoly, h=h, ext=ext, grid=grid, div=div)
+      prep <- HRprocess(cenac, utm = utm, ll = ll, type = type, 
+                        cont = cont, sub = sub, cumulative = cumulative, 
+                        storepoly = storepoly, h = h, ext = ext, 
+                        grid = grid, div = div)
 
       if(i %in% 1){
-        fullout<-prep$Full.Out
-        subout<-prep$Sub.Out
+        
+        fullout <- prep$Full.Out
+        subout <- prep$Sub.Out
+        
         if(storepoly){
-          polyout<-list()
-          polyout[[full$Tag.ID[i]]]<-prep$sp
+          polyout <- list()
+          polyout[[full$Tag.ID[i]]] <- prep$sp
         }
-
-      }else{
-        fullout<-rbind(fullout, prep$Full.Out)
-        subout<-rbind(subout, prep$Sub.Out)
-        if(storepoly){
-          polyout[[full$Tag.ID[i]]]<-prep$sp
+        
+        } else {
+          
+          fullout <- rbind(fullout, prep$Full.Out)
+          subout <- rbind(subout, prep$Sub.Out)
+          
+          if(storepoly){
+            polyout[[full$Tag.ID[i]]] <- prep$sp
+          }
         }
-      }
-    },error=function(e){message("\nError in Tag.ID: ", full$Tag.ID[i], "\n", conditionMessage(e))})
-    setTxtProgressBar(txtProgressBar(min=0, max=nrow(full), style=3), i)
-  }; cat("\n")
+      }, 
+    error = function(e){message("\nError in Tag.ID: ", full$Tag.ID[i], "\n", conditionMessage(e))},
+    warning = function(w){message("\nWarning in Tag.ID: ", full$Tag.ID[i], "\n", conditionMessage(w))})
+    setTxtProgressBar(txtProgressBar(min=0, max = nrow(full), style = 3), i)
+  }
+  
+  cat("\n")
 
   ## Merge activity space metrics to master data frames
-  full<-left_join(full, fullout, by=c("Tag.ID"), all.x=T)
-  tsub<-left_join(tsub, subout, by=c("Tag.ID","subset"))
+  full <- left_join(full, fullout, by = c("Tag.ID"))
+  tsub <- left_join(tsub, subout, by = c("Tag.ID","subset"))
 
   if(storepoly){
-    output<-list(Overall = full, Subsetted = tsub, Spatial.Objects = polyout)
+    output <- list(Overall = full, Subsetted = tsub, Spatial.Objects = polyout)
   }else{
-    output<-list(Overall = full, Subsetted = tsub)
+    output <- list(Overall = full, Subsetted = tsub)
   }
 
   return(output)
