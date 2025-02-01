@@ -1,5 +1,4 @@
-
-<img src="vignettes/images/Vtrack_logo_bg.png"/>
+<p align="center"><img src="vignettes/images/Vtrack_logo_bg.png"/></p>
 
 # VTrack
 
