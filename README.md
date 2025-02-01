@@ -1,5 +1,5 @@
 
-<img src="vignettes/images/banner1.png"/>
+<img src="vignettes/images/VTrack_logo_bg.png"/>
 
 # VTrack
 
