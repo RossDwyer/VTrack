@@ -25,6 +25,7 @@
 #' @importFrom dplyr summarize
 #' @importFrom dplyr select
 #' @importFrom lubridate ymd_hms
+#' @importFrom lubridate as_datetime
 #' @importFrom lubridate date
 #' @importFrom sf st_crs
 #' 
@@ -57,7 +58,7 @@ setupData <- function(Tag.Detections,
   
   if(source %in% "IMOS"){
     Tag.Detections = as_tibble(Tag.Detections) %>%
-      transmute(Date.Time = lubridate::ymd_hms(detection_timestamp, tz = tzone),
+      transmute(Date.Time = lubridate::as_datetime(detection_timestamp, tz = tzone),
                 Transmitter = transmitter_id,
                 Station.Name = station_name,
                 Receiver = receiver_name,
@@ -67,7 +68,7 @@ setupData <- function(Tag.Detections,
                 Sensor.Unit = sensor_unit)}
   if(source %in% "VEMCO"){
     Tag.Detections = as_tibble(Tag.Detections) %>%
-      transmute(Date.Time = lubridate::ymd_hms(Date.and.Time..UTC., tz = tzone),
+      transmute(Date.Time = lubridate::as_datetime(Date.and.Time..UTC., tz = tzone),
                 Transmitter = Transmitter,
                 Station.Name = Station.Name,
                 Receiver = Receiver,
