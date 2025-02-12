@@ -85,7 +85,8 @@ HRSummary <- function(COAdata,
                       h = 500,
                       ext = 2,
                       grid = 200,
-                      div = 4) {
+                      div = 4, 
+                      min_unique_pts = 4) {
   
   
   if(!inherits(COAdata, "COA"))
@@ -128,7 +129,7 @@ HRSummary <- function(COAdata,
       prep <- HRprocess(cenac, utm = utm, ll = ll, type = type, 
                         cont = cont, sub = sub, cumulative = cumulative, 
                         storepoly = storepoly, h = h, ext = ext, 
-                        grid = grid, div = div)
+                        grid = grid, div = div, min_unique_pts = min_unique_pts)
 
       if(i %in% 1){
         
