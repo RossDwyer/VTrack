@@ -51,16 +51,17 @@ HRprocess <- function(cenac,
                       cont = c(50, 95),
                       cumulative = FALSE,
                       storepoly = FALSE,
-                      div = 4) {
+                      div = 4,
+                      min_unique_pts = 4) {
   
   
   ## add subset column
   cenac <- mutate(cenac, subset = factor(format(TimeStep.coa, sub)))
   
   ### remove subsets with fewer than 5 detections
-  COA <- droplevels(cenac[cenac$subset %in% names(table(cenac$subset)[table(cenac$subset) > 5]), ])
+  COA <- droplevels(cenac[cenac$subset %in% names(table(cenac$subset)[table(cenac$subset) > min_unique_pts]), ])
   
-  if (nrow(unique(COA[, c("Latitude.coa", "Longitude.coa")])) > 5) {
+  if (nrow(unique(COA[, c("Latitude.coa", "Longitude.coa")])) > min_unique_pts) {
     ## Setup spatial data and convert from lat long to UTM
     dat <- 
       COA %>% 
