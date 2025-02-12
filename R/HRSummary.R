@@ -152,8 +152,9 @@ HRSummary <- function(COAdata,
           }
         }
       }, 
-    error = function(e){message("\nError in Tag.ID: ", full$Tag.ID[i], "\n", conditionMessage(e))},
-    warning = function(w){message("\nWarning in Tag.ID: ", full$Tag.ID[i], "\n", conditionMessage(w))})
+    error = function(e){message("\nError in Tag.ID: ", full$Tag.ID[i], "\n", conditionMessage(e))}#,
+    #warning = function(w){message("\nWarning in Tag.ID: ", full$Tag.ID[i], "\n", conditionMessage(w))}
+            )
     setTxtProgressBar(txtProgressBar(min=0, max = nrow(full), style = 3), i)
   }
   
