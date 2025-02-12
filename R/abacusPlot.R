@@ -20,6 +20,7 @@
 #' 
 #' @importFrom dplyr left_join
 #' @importFrom dplyr filter
+#' @importFrom dplyr pull
 #' @importFrom dplyr group_by
 #' @importFrom dplyr summarise
 #' @import ggplot2
@@ -65,6 +66,18 @@ abacusPlot <- function(ATTdata,
   if(!is.null(id)){
     combdata <- combdata %>%
       filter(Tag.ID %in% id)
+  }
+
+  ## Check to see if there are detections without metadata associated with them
+  tags_without_metadata <- 
+    combdata %>% 
+    filter(!Transmitter %in% unique(ATTdata$Tag.Metadata$Transmitter)) %>% 
+    pull(Transmitter) %>% unique()
+    
+  if(length(tags_without_metadata) > 0){
+    message("Detections associated with the following transmitters don't have metadata associated in Tag.Metadata:")
+    message(paste(tags_without_metadata, collapse = "\n"))
+    message("These will plot as an 'NA' in the abacus plot.")
   }
 
   ## Find start and end date of taglife
