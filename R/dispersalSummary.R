@@ -55,6 +55,17 @@ dispersalSummary <- function(ATTdata) {
   data <- 
     left_join(ATTdata$Tag.Detections, ATTdata$Tag.Metadata, by = "Transmitter") %>% 
     arrange(Tag.ID, Date.Time)
+
+  ## Check to see if there are detections without metadata associated with them
+  tags_without_metadata <- 
+    data %>% 
+    filter(!Transmitter %in% unique(ATTdata$Tag.Metadata$Transmitter)) %>% 
+    pull(Transmitter) %>% unique()
+    
+  if(length(tags_without_metadata) > 0){
+    message("Detections associated with the following transmitters don't have metadata associated in Tag.Metadata:")
+    message(paste(tags_without_metadata, collapse = "\n"))
+  }
   
   ## crs from ATTdata
   crs <- attr(ATTdata, "CRS")
