@@ -25,9 +25,10 @@
 #'   included if cumulative=TRUE.
 #'
 #' @seealso Input data needs to be setup using \code{\link{setupData}}, and COAs calculated using \code{\link{COA}}.
-#' @export
+
 #' @import adehabitatHR
 #' @import sp
+#' @import sf
 #' @importFrom raster spTransform
 #' @importFrom raster projection
 #' @importFrom dplyr left_join
@@ -36,32 +37,44 @@
 #' @importFrom dplyr summarize
 #' @importFrom dplyr select
 #' @importFrom lubridate ymd_hms
-HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%Y-%m", cont=c(50,95), cumulative=FALSE, storepoly=FALSE, div=4){
+#' 
+#' @export
 
-  TimeStep.coa <- Latitude.coa <- Longitude.coa <- V1 <- Tag.ID <- raster <- NULL 
+HRprocess <- function(cenac,
+                      utm,
+                      ll,
+                      type = "MCP",
+                      h = 200,
+                      ext = 2,
+                      grid = 200,
+                      sub = "%Y-%m",
+                      cont = c(50, 95),
+                      cumulative = FALSE,
+                      storepoly = FALSE,
+                      div = 4,
+                      min_unique_pts = 4) {
+  
   
   ## add subset column
   cenac <- mutate(cenac, subset = factor(format(TimeStep.coa, sub)))
   
   ### remove subsets with fewer than 5 detections
-  COA <- droplevels(cenac[cenac$subset %in% names(table(cenac$subset)[table(cenac$subset) > 5]), ])
+  COA <- droplevels(cenac[cenac$subset %in% names(table(cenac$subset)[table(cenac$subset) > min_unique_pts]), ])
   
-  if (nrow(unique(COA[, c("Latitude.coa", "Longitude.coa")])) > 5) {
+  if (nrow(unique(COA[, c("Latitude.coa", "Longitude.coa")])) > min_unique_pts) {
     ## Setup spatial data and convert from lat long to UTM
-    sdat <- COA
-    coordinates(sdat) <- c("Longitude.coa", "Latitude.coa")
-    projection(sdat) <- ll
-    dat <- spTransform(sdat, utm)
+    dat <- 
+      COA %>% 
+      st_as_sf(coords = c("Longitude.coa", "Latitude.coa"), crs = ll, remove = F) %>% 
+      st_transform(crs = utm) %>% 
+      as_Spatial()
     
     if (type %in% "MCP") {
       ## full tag life
       fullout <-
-        as.data.frame(matrix(
-          NA,
-          ncol = length(cont) + 1,
-          nrow = 1,
-          dimnames = list(c(), c("Tag.ID", paste0("MCP.", cont)))
-        ))
+        as.data.frame(matrix(NA, ncol = length(cont) + 1,
+                             nrow = 1,
+                             dimnames = list(c(), c("Tag.ID", paste0("MCP.", cont)))))
       fullout[, "Tag.ID"] <- levels(dat$Tag.ID)[1]
       for (m in 1:length(cont)) {
         fullout[1, paste0("MCP.", cont[m])] <-
@@ -72,16 +85,11 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
       }
       ## temporal subset
       subout <-
-        as.data.frame(matrix(
-          NA,
-          ncol = length(cont) + 2,
-          nrow = length(levels(dat$subset)),
-          dimnames = list(c(), c(
-            "Tag.ID", "subset", paste0("MCP.", cont)
-          ))
-        ))
-      subout[, "Tag.ID"] <-
-        levels(dat$Tag.ID)[1]
+        as.data.frame(matrix(NA,
+                             ncol = length(cont) + 2,
+                             nrow = length(levels(dat$subset)),
+                             dimnames = list(c(), c("Tag.ID", "subset", paste0("MCP.", cont)))))
+      subout[, "Tag.ID"] <- levels(dat$Tag.ID)[1]
       subout[, "subset"] <- levels(dat$subset)
       for (m in 1:length(cont)) {
         subout[, paste0("MCP.", cont[m])] <-
@@ -102,8 +110,7 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
               "Tag.ID", "subset", paste0("Cumulative.MCP.", cont)
             ))
           ))
-        cumout[, "Tag.ID"] <-
-          levels(dat$Tag.ID)[1]
+        cumout[, "Tag.ID"] <- levels(dat$Tag.ID)[1]
         cumout[, "subset"] <- levels(dat$subset)
         for (c in 1:length(levels(dat$subset))) {
           cdat <- subset(dat, subset %in% levels(dat$subset)[1:c])
@@ -132,8 +139,7 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
                   unin = "m",
                   unout = "m2")
             if (m %in% 1) {
-              mcp_full <-
-                spTransform(mcpcont, ll)
+              mcp_full <- spTransform(mcpcont, ll)
             } else{
               mcp_full <- rbind(mcp_full, spTransform(mcpcont, ll))
             }
@@ -194,11 +200,8 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
     
     if (type %in% "BBKUD") {
       ### Define grid
-      width <-
-        ceiling(max((extent(dat)[2] - extent(dat)[1]) / 2, (extent(dat)[4] - extent(dat)[3]) /
-                      2))
-      xcen <-
-        (extent(dat)[2] + extent(dat)[1]) / 2
+      width <- ceiling(max((extent(dat)[2] - extent(dat)[1]) / 2, (extent(dat)[4] - extent(dat)[3]) / 2))
+      xcen <- (extent(dat)[2] + extent(dat)[1]) / 2
       ycen <- (extent(dat)[4] + extent(dat)[3]) / 2
       gr <-
         expand.grid(x = seq(xcen - (width * ext), xcen + (width * ext), len = grid),
@@ -214,7 +217,9 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
           nrow = 1,
           dimnames = list(c(), c("Tag.ID", paste0("BBKUD.", cont)))
         ))
+      
       fullout[, "Tag.ID"] <- levels(dat$Tag.ID)[1]
+      
       tf <-
         as.ltraj(
           xy = coordinates(dat),
@@ -223,26 +228,22 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
           typeII = TRUE,
           proj4string = utm
         )
-      s1f <-
-        (liker(
-          tf,
-          rangesig1 = c(0, 500),
-          sig2 = h,
-          byburst = FALSE,
-          plotit = FALSE
-        )[[1]]$sig1) / div
+      
+      s1f <- (liker(tf, rangesig1 = c(0, 500), sig2 = h, byburst = FALSE, plotit = FALSE)[[1]]$sig1) / div
       tryCatch({
         kbfull <- kernelbb(tf,
                            sig1 = s1f,
                            sig2 = h,
                            grid = gr)
+        
         bf <- kernel.area(kbfull,
                           percent = cont,
                           unin = "m",
                           unout = "m2")
+        
         fullout[, paste0("BBKUD.", cont)] <- bf
-      }, error = function(e) {
-        message(
+        }, error = function(e) {
+          message(
           "Error in calculating full BBKUD estimates for Tag.ID: ",
           cenac$Tag.ID[1],
           "\n",
@@ -258,12 +259,16 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
           nrow = length(levels(dat$subset)),
           dimnames = list(c(), c("Tag.ID", "subset"))
         ))
-      subout[, "Tag.ID"] <-
-        levels(dat$Tag.ID)[1]
+      subout[, "Tag.ID"] <- levels(dat$Tag.ID)[1]
       subout[, "subset"] <- levels(dat$subset)
       ## identify subsets where more than 5 unique coorindates exist for smoother kud estimation
       ym <-
-        COA %>% group_by(subset) %>% summarise(V1 = n_distinct(Latitude.coa, Longitude.coa)) %>% filter(V1 > 5) %>% data.frame()
+        COA %>% 
+        group_by(subset) %>% 
+        summarise(V1 = n_distinct(Latitude.coa, Longitude.coa)) %>% 
+        filter(V1 > 5) %>% 
+        data.frame()
+      
       yfac <- ym[ym$V1 > 5, "subset"]
       
       if (length(yfac) > 0) {
@@ -275,25 +280,21 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
             typeII = TRUE,
             proj4string = utm
           )[yfac]
-        s1 <-
-          liker(
-            traj,
-            rangesig1 = c(0, 500),
-            sig2 = h,
-            byburst = FALSE,
-            plotit = FALSE
-          )
+        
+        s1 <- liker(traj, rangesig1 = c(0, 500), sig2 = h, byburst = FALSE, plotit = FALSE)
         sig1 <- (unname(sapply(s1, '[[', 1))) / div
+        
         tryCatch({
           kbb <- kernelbb(traj,
                           sig1 = sig1,
                           sig2 = h,
                           grid = gr)
+          
           bb <- kernel.area(kbb,
                             percent = cont,
                             unin = "m",
                             unout = "m2")
-        }, error = function(e) {
+          }, error = function(e) {
           message(
             "Error in calculating subsetted BBKUD estimates for Tag.ID: ",
             cenac$Tag.ID[1],
@@ -302,19 +303,16 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
           )
         })
         
-        barea <-
-          data.frame(Tag.ID = as.character(levels(dat$Tag.ID)[1]) ,
-                     subset = as.character(yfac),
-                     t(data.frame(bb)))
-        colnames(barea) <-
-          c("Tag.ID", "subset", paste0("BBKUD.", cont))
+        barea <- data.frame(Tag.ID = as.character(levels(dat$Tag.ID)[1]),
+                            subset = as.character(yfac),
+                            t(data.frame(bb)))
+        
+        colnames(barea) <- c("Tag.ID", "subset", paste0("BBKUD.", cont))
         rownames(barea) <- NULL
-        subout <-
-          left_join(
-            subout,
-            barea %>% mutate(Tag.ID = as.character(Tag.ID), subset = as.character(subset)),
-            by = c("Tag.ID", "subset")
-          )
+        subout <- left_join(subout,
+                            barea %>% 
+                              mutate(Tag.ID = as.character(Tag.ID), subset = as.character(subset)),
+                            by = c("Tag.ID", "subset"))
       }
       
       ## cumulative area estimation
@@ -328,9 +326,10 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
               "Tag.ID", "subset", paste0("Cumulative.BBKUD.", cont)
             ))
           ))
-        cumout[, "Tag.ID"] <-
-          levels(dat$Tag.ID)[1]
+        
+        cumout[, "Tag.ID"] <- levels(dat$Tag.ID)[1]
         cumout[, "subset"] <- levels(dat$subset)
+        
         for (c in 1:length(levels(dat$subset))) {
           cdat <- subset(dat, subset %in% levels(dat$subset)[1:c])
           ct <-
@@ -341,19 +340,15 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
               typeII = TRUE,
               proj4string = utm
             )
-          csig1 <-
-            (liker(
-              ct,
-              rangesig1 = c(0, 500),
-              sig2 = h,
-              byburst = FALSE,
-              plotit = FALSE
-            )[[1]]$sig1) / div
+          
+          csig1 <- (liker(ct, rangesig1 = c(0, 500), sig2 = h, byburst = FALSE, plotit = FALSE)[[1]]$sig1) / div
+          
           tryCatch({
             ckbb <- kernelbb(ct,
                              sig1 = csig1,
                              sig2 = h,
                              grid = gr)
+            
             cumout[c, paste0("Cumulative.BBKUD.", cont)] <-
               kernel.area(ckbb,
                           percent = cont,
@@ -368,8 +363,7 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
             )
           })
         }
-        subout <-
-          left_join(subout, cumout, by = c("Tag.ID", "subset"))
+        subout <- left_join(subout, cumout, by = c("Tag.ID", "subset"))
       }
       
       output <- list(Full.Out = fullout, Sub.Out = subout)
@@ -380,8 +374,7 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
         tryCatch({
           ras_full <- raster(getvolumeUD(kbfull))
           projection(ras_full) <- utm
-          Spatial.Objects$BBKUD_full <-
-            projectRaster(ras_full, crs = ll)
+          Spatial.Objects$BBKUD_full <- projectRaster(ras_full, crs = ll)
         }, error = function(e) {
           message(
             "Error in saving full BBKUD raster for Tag.ID: ",
@@ -395,8 +388,7 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
             ras <-
             stack(lapply(getvolumeUD(kbb), raster))
           projection(ras_sub) <- utm
-          Spatial.Objects$BBKUD_sub <-
-            projectRaster(ras_sub, crs = ll)
+          Spatial.Objects$BBKUD_sub <- projectRaster(ras_sub, crs = ll)
         }, error = function(e) {
           message(
             "Error in saving subsetted BBKUD rasterstack for Tag.ID: ",
@@ -416,11 +408,8 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
     
     if (type %in% "fKUD") {
       ### Define grid
-      width <-
-        ceiling(max((extent(dat)[2] - extent(dat)[1]) / 2, (extent(dat)[4] - extent(dat)[3]) /
-                      2))
-      xcen <-
-        (extent(dat)[2] + extent(dat)[1]) / 2
+      width <- ceiling(max((extent(dat)[2] - extent(dat)[1]) / 2, (extent(dat)[4] - extent(dat)[3]) /2))
+      xcen <- (extent(dat)[2] + extent(dat)[1]) / 2
       ycen <- (extent(dat)[4] + extent(dat)[3]) / 2
       gr <-
         expand.grid(x = seq(xcen - (width * ext), xcen + (width * ext), len = grid),
@@ -461,16 +450,19 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
           nrow = length(levels(dat$subset)),
           dimnames = list(c(), c("Tag.ID", "subset"))
         ))
-      subout[, "Tag.ID"] <-
-        levels(dat$Tag.ID)[1]
+      subout[, "Tag.ID"] <- levels(dat$Tag.ID)[1]
       subout[, "subset"] <- levels(dat$subset)
       ## identify subsets where more than 5 unique coorindates exist for smoother kud estimation
-      ym <-
-        COA %>% group_by(subset) %>% summarise(V1 = n_distinct(Latitude.coa, Longitude.coa)) %>% filter(V1 > 5) %>% data.frame()
+      ym <- 
+        COA %>% 
+        group_by(subset) %>% 
+        summarise(V1 = n_distinct(Latitude.coa, Longitude.coa)) %>% 
+        filter(V1 > 5) %>% 
+        data.frame()
+      
       yfac <- ym[ym$V1 > 5, "subset"]
       
-      kdat <-
-        dat[dat$subset %in% yfac, ]
+      kdat <- dat[dat$subset %in% yfac, ]
       kdat$subset <- droplevels(kdat$subset)
       
       if (length(yfac) > 0) {
@@ -493,15 +485,14 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
           data.frame(Tag.ID = as.character(levels(dat$Tag.ID)[1]) ,
                      subset = as.character(yfac),
                      t(data.frame(bb)))
-        colnames(barea) <-
-          c("Tag.ID", "subset", paste0("fKUD.", cont))
+        
+        colnames(barea) <- c("Tag.ID", "subset", paste0("fKUD.", cont))
         rownames(barea) <- NULL
-        subout <-
-          left_join(
-            subout,
-            barea %>% mutate(Tag.ID = as.character(Tag.ID), subset = as.character(subset)),
-            by = c("Tag.ID", "subset")
-          )
+        
+        subout <- left_join(subout,
+                            barea %>% 
+                              mutate(Tag.ID = as.character(Tag.ID), subset = as.character(subset)),
+                            by = c("Tag.ID", "subset"))
       }
       
       ## cumulative area estimation
@@ -515,9 +506,10 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
               "Tag.ID", "subset", paste0("Cumulative.fKUD.", cont)
             ))
           ))
-        cumout[, "Tag.ID"] <-
-          levels(dat$Tag.ID)[1]
+        
+        cumout[, "Tag.ID"] <- levels(dat$Tag.ID)[1]
         cumout[, "subset"] <- levels(dat$subset)
+        
         for (c in 1:length(levels(dat$subset))) {
           cdat <- subset(dat, subset %in% levels(dat$subset)[1:c])
           tryCatch({
@@ -536,8 +528,7 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
             )
           })
         }
-        subout <-
-          left_join(subout, cumout, by = c("Tag.ID", "subset"))
+        subout <- left_join(subout, cumout, by = c("Tag.ID", "subset"))
       }
       
       output <- list(Full.Out = fullout, Sub.Out = subout)
@@ -549,8 +540,7 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
         tryCatch({
           ras_full <- raster(getvolumeUD(kbfull))
           projection(ras_full) <- utm
-          Spatial.Objects$fKUD_full <-
-            projectRaster(ras_full, crs = ll)
+          Spatial.Objects$fKUD_full <- projectRaster(ras_full, crs = ll)
         }, error = function(e) {
           message(
             "Error in saving full fKUD raster for Tag.ID: ",
@@ -564,8 +554,7 @@ HRprocess <- function(cenac, utm, ll, type="MCP", h=200, ext=2, grid=200, sub="%
             ras <-
             stack(lapply(getvolumeUD(kbb), raster))
           projection(ras_sub) <- utm
-          Spatial.Objects$fKUD_sub <-
-            projectRaster(ras_sub, crs = ll)
+          Spatial.Objects$fKUD_sub <- projectRaster(ras_sub, crs = ll)
         }, error = function(e) {
           message(
             "Error in saving subsetted fKUD rasterstack for Tag.ID: ",

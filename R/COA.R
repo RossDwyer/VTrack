@@ -14,11 +14,11 @@
 #' @return Exports a 'COA' object that is a tibble (if split = FALSE) or a list of tibbles (if split = TRUE)
 #'
 #' @seealso Input data needs to be setup using \code{\link{setupData}}. 'COA' object required for \code{\link{HRSummary}}
-#' @export
+#' 
 #' @importFrom dplyr left_join
 #' @importFrom dplyr mutate
-#' @importFrom dplyr summarize
-#' @importFrom lubridate ymd_hms
+#' @importFrom dplyr summarise
+#' @importFrom lubridate as_datetime
 #' @examples
 #' ## Import example datasets
 #' data(IMOSdata)
@@ -35,17 +35,21 @@
 #' COAdata<- COA(ATTdata)
 #'
 #'
-COA<-function (ATTdata, timestep=60, split=FALSE){
+#' @export
+
+COA <- function(ATTdata,
+                timestep = 60,
+                split = FALSE) {
+  
+  
   if(!inherits(ATTdata, "ATT"))
     stop("Oops! Input data needs to be an 'ATT' object.\nSet up your data first using setupData() before running this operation")
 
-  Tag.ID <- TimeStep.coa <- Latitude <- Longitude <- Sensor.Value <- NULL
-  Sensor.Unit <- Station.Name <- Sci.Name <- Common.Name <- Tag.Project <- NULL
-  Release.Latitude <- Release.Longitude <- Release.Date <- Tag.Life <- NULL
-  Tag.Status <- Sex <- Bio <- NULL
   
   ## Combine Tag.Detection and Tag.Metadata into a combined tibble for processing
-  data<- left_join(ATTdata$Tag.Detections, ATTdata$Tag.Metadata, by="Transmitter") %>%
+  data <- 
+    ATTdata$Tag.Detections %>% 
+    left_join(ATTdata$Tag.Metadata, by = "Transmitter") %>%
     mutate(Tag.ID = factor(Tag.ID))
 
   step_sec <- timestep * 60
@@ -53,35 +57,29 @@ COA<-function (ATTdata, timestep=60, split=FALSE){
             to = trunc(max(data$Date.Time, na.rm = TRUE), "day") + 86400,
             by = step_sec)
   data$TimeStep.coa <- cut(data$Date.Time, breaks = ex)
+  
 
   cenac <-
     data %>%
-    group_by(Tag.ID, TimeStep.coa) %>%
-    summarize(Latitude.coa = mean(Latitude, na.rm = TRUE),
+    group_by(Tag.ID, TimeStep.coa, Sensor.Unit, Sci.Name, Common.Name,
+             Tag.Project, Release.Latitude, Release.Longitude, Release.Date,
+             Tag.Life, Tag.Status, Sex, Bio) %>%
+    summarise(Latitude.coa = mean(Latitude, na.rm = TRUE),
               Longitude.coa = mean(Longitude, na.rm = TRUE),
               Sensor.Value.coa = mean(Sensor.Value),
-              Sensor.Unit = first(Sensor.Unit),
               Number.of.Stations = n_distinct(Station.Name),
-              Number.of.Detections = n(),
-              Sci.Name = first(Sci.Name),
-              Common.Name = first(Common.Name),
-              Tag.Project = first(Tag.Project),
-              Release.Latitude = first(Release.Latitude),
-              Release.Longitude = first(Release.Longitude),
-              Release.Date = first(Release.Date),
-              Tag.Life = first(Tag.Life),
-              Tag.Status = first(Tag.Status),
-              Sex = first(Sex),
-              Bio = first(Bio)) %>%
-    mutate(TimeStep.coa = lubridate::ymd_hms(TimeStep.coa))
+              Number.of.Detections = n(), 
+              .groups = "keep") %>%
+    mutate(TimeStep.coa = lubridate::as_datetime(TimeStep.coa)) %>% 
+    group_by(Tag.ID)
 
   if(length(group_size(cenac)) > 1 & split == TRUE){
     cenac <- split(cenac, cenac$Tag.ID)
-    attr(cenac, "class")<-c("list","COA", "ATT")
-    attr(cenac, "CRS")<-attr(ATTdata, "CRS")
+    attr(cenac, "class") <- c("list","COA", "ATT")
+    attr(cenac, "CRS") <- attr(ATTdata, "CRS")
   }else{
-    attr(cenac, "class")<-c("grouped_df","COA","ATT","tbl_df","tbl","data.frame")
-    attr(cenac, "CRS")<-attr(ATTdata, "CRS")
+    attr(cenac, "class") <- c("grouped_df","COA","ATT","tbl_df","tbl","data.frame")
+    attr(cenac, "CRS") <- attr(ATTdata, "CRS")
   }
   return(cenac)
 }

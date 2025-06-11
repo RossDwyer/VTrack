@@ -17,11 +17,12 @@
 #'   (determined by "Tag.ID" field name). If facet parameter is TRUE detections of each tag on
 #'   receiver stations plotted.
 #' @seealso Input data needs to be setup using \code{\link{setupData}}
-#' @export
+#' 
 #' @importFrom dplyr left_join
 #' @importFrom dplyr filter
+#' @importFrom dplyr pull
 #' @importFrom dplyr group_by
-#' @importFrom dplyr summarize
+#' @importFrom dplyr summarise
 #' @import ggplot2
 #' @examples
 #' ## Import example datasets
@@ -39,44 +40,81 @@
 #' abacusPlot(ATTdata)
 #'
 #'
-abacusPlot<-function(ATTdata, id=NULL, theme="theme_linedraw", xlab=NULL, ylab=NULL, det.col=2, tag.col=8, facet=FALSE, new.window=FALSE, ...){
+#' @export
+
+abacusPlot <- function(ATTdata,
+                       id = NULL,
+                       theme = "theme_linedraw",
+                       xlab = NULL,
+                       ylab = NULL,
+                       det.col = "grey",
+                       tag_start.col = "forestgreen",
+                       tag_end.col = "firebrick",
+                       facet = FALSE,
+                       new.window = FALSE,
+                       ...) {
+  
   if(!inherits(ATTdata, "ATT"))
     stop("Oops! Input data needs to be an 'ATT' object.
          \nSet up your data first using setupData() before running this operation")
 
-  Tag.ID <- Release.Date <- Date.Time <- Tag.Life <- Station.Name <- Start <- End <- NULL
   
   ## Combine Tag.Detection and Tag.Metadata into a combined tibble for plotting
-  combdata<- left_join(ATTdata$Tag.Detections, ATTdata$Tag.Metadata, by="Transmitter")
+  combdata <- left_join(ATTdata$Tag.Detections, ATTdata$Tag.Metadata, by = "Transmitter")
 
   ## Subset Tag.ID if 'id' is supplied
   if(!is.null(id)){
-    combdata<- combdata %>%
+    combdata <- combdata %>%
       filter(Tag.ID %in% id)
   }
 
-  ## Find start and end date of taglife
-  ss<-combdata %>%
-    group_by(Tag.ID) %>%
-    summarize(Start = min(first(Release.Date), min(date(Date.Time)), na.rm=T),
-              End = max((first(Release.Date)+first(Tag.Life)), max(date(Date.Time)), na.rm=T))
+  ## Check to see if there are detections without metadata associated with them
+  tags_without_metadata <- 
+    combdata %>% 
+    filter(!Transmitter %in% unique(ATTdata$Tag.Metadata$Transmitter)) %>% 
+    pull(Transmitter) %>% unique()
+    
+  if(length(tags_without_metadata) > 0){
+    message("Detections associated with the following transmitters don't have metadata associated in Tag.Metadata:")
+    message(paste(tags_without_metadata, collapse = "\n"))
+    message("These will plot as an 'NA' in the abacus plot.")
+  }
 
+  ## Find start and end date of taglife
+  ss <- 
+    combdata %>%
+    group_by(Tag.ID = factor(Tag.ID)) %>%
+    summarise(Start = first(Release.Date),
+              End = first(Release.Date) + first(Tag.Life))
+  
+  if(any(is.na(ss[,c("Start", "End")]))){
+    message("One or more tags don't have a Release date or Estimated tag life information associated.")
+  }  
+  
   if(new.window){dev.new(noRStudioGD=TRUE, width=9, height=6)}
 
   if(facet){
-    ggplot(combdata) +
+    combdata %>%
+      group_by(Date.Time = date(Date.Time), Tag.ID = factor(Tag.ID), Station.Name = factor(Station.Name)) %>%
+      summarise(num_det = n(), .groups = "keep") %>%
+      ggplot() +
       xlab(ifelse(!is.null(xlab), xlab, "Date")) + ylab(ifelse(!is.null(ylab), ylab, "Station Name")) +
-      geom_point(aes(x = date(Date.Time), y = as.factor(Station.Name)), col=det.col, ...) +
-      facet_wrap(~Tag.ID) +
-      scale_x_date(date_labels= "%b\n%Y", minor_breaks = NULL) +
+      geom_point(aes(x = date(Date.Time), y = as.factor(Station.Name)), col = det.col, ...) +
+      geom_vline(data = ss, aes(xintercept = Start), col = tag_start.col, na.rm = T) +
+      geom_vline(data = ss, aes(xintercept = End), col = tag_end.col, na.rm = T) +
+      facet_wrap(~factor(Tag.ID)) +
+      scale_x_date(date_labels = "%b\n%Y", minor_breaks = NULL) +
       eval(call(theme))
   }else{
-    ggplot(combdata) +
+    combdata %>%
+      group_by(Date.Time = date(Date.Time), Tag.ID = factor(Tag.ID)) %>%
+      summarise(num_det = n(), .groups = "keep") %>%
+      ggplot() +
       xlab(ifelse(!is.null(xlab), xlab, "Date")) + ylab(ifelse(!is.null(ylab), ylab, "Tag ID")) +
-      geom_point(aes(x = date(Date.Time), y = as.factor(Tag.ID)), col=det.col, ...) +
-      geom_point(data= ss, aes(x = Start, y = as.factor(Tag.ID)), pch="|", col=tag.col, cex=3) +
-      geom_point(data= ss, aes(x = End, y = as.factor(Tag.ID)), pch="|", col=tag.col, cex=3) +
-      scale_x_date(date_labels= "%b\n%Y", minor_breaks = NULL) +
+      geom_point(aes(x = date(Date.Time), y = as.factor(Tag.ID)), col = det.col, ...) +
+      geom_point(data = ss, aes(x = Start, y = as.factor(Tag.ID)), pch = "|", col = tag_start.col, cex = 3, na.rm = T) +
+      geom_point(data = ss, aes(x = End, y = as.factor(Tag.ID)), pch = "|", col = tag_end.col, cex = 3, na.rm = T) +
+      scale_x_date(date_labels = "%b\n%Y", minor_breaks = NULL) +
       eval(call(theme))
   }
 }
